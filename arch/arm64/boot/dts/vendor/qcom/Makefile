@@ -47,7 +47,7 @@ instantnoodlev-overlay-t0.dtbo-base := kona-v2.1.dtb
 instantnoodlev-overlay-evt1.dtbo-base := kona-v2.1.dtb
 instantnoodlev-overlay-dvt.dtbo-base := kona-v2.1.dtb
 
-kebab-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+kebab-overlay.dtbo-base := kona-v2.1.dtb
 else
 dtb-$(CONFIG_ARCH_KONA) += kona-rumi.dtb \
         kona-mtp.dtb \
