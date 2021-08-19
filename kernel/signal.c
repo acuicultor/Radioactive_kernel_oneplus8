@@ -1110,7 +1110,7 @@ static int __send_signal(int sig, struct siginfo *info, struct task_struct *t,
 			(!strcmp(t->comm, "netd") && sig == 9)) {
 			struct task_struct *tg = current->group_leader;
 
-			pr_info("process %d:%s, %d:%s send sig:%d to process %d:%s\n",
+			pr_debug("process %d:%s, %d:%s send sig:%d to process %d:%s\n",
 			       tg->pid, tg->comm, current->pid, current->comm, sig, t->pid, t->comm);
 		}
 	}

@@ -45,12 +45,12 @@ void iris_set_loglevel(int level);
 int iris_get_loglevel(void);
 
 /* Priority:
- * IRIS_LOGE > IRIS_LOGW > IRIS_LOGI > IRIS_LOGD > IRIS_LOGV
+ * IRIS_LOGE > IRIS_LOGW > IRIS_LOGD > IRIS_LOGD > IRIS_LOGV
  * Instructions:
  * 1. IRIS_LOGE, for error log, it can print always.
  * 2. IRIS_LOGW, for warrning log, 'iris_log_level' is 2, so it
  *    can print always by default.
- * 3. IRIS_LOGI, for key info log, 'iris_log_level' is 2, so it
+ * 3. IRIS_LOGD, for key info log, 'iris_log_level' is 2, so it
  *    can print always by default.
  * 4. IRIS_LOGD, for debug log, it cann't print unless you set
  *    'iris_log_level' to '3' or more greater.
@@ -122,8 +122,8 @@ int iris_get_loglevel(void);
 #define IRIS_IF_NOT_LOGVV()	((iris_get_loglevel() < 5) ? true : false)
 #endif
 
-#ifndef IRIS_LOGI_IF
-#define IRIS_LOGI_IF(cond)	(((cond) && iris_get_loglevel() > 1) ? true : false)
+#ifndef IRIS_LOGD_IF
+#define IRIS_LOGD_IF(cond)	(((cond) && iris_get_loglevel() > 1) ? true : false)
 #endif
 
 #ifndef IRIS_LOGD_IF

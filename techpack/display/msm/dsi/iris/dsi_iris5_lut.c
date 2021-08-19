@@ -304,7 +304,7 @@ static void _iris_parse_panel_nits(const struct firmware *fw)
 	struct iris_cfg *pcfg = iris_get_cfg();
 
 	pcfg->panel_nits = fw->data[fw->size-2]<<8 | fw->data[fw->size-3];
-	IRIS_LOGI("%s(), panel nits: 0x%04x.", __func__, pcfg->panel_nits);
+	IRIS_LOGD("%s(), panel nits: 0x%04x.", __func__, pcfg->panel_nits);
 }
 
 static u8 _iris_parse_calibrate_status(const struct firmware *fw)
@@ -312,7 +312,7 @@ static u8 _iris_parse_calibrate_status(const struct firmware *fw)
 	u8 calibrate_status = 0;
 
 	calibrate_status = fw->data[fw->size-1];
-	IRIS_LOGI("%s(), panel calibrate status: 0x%02x.",
+	IRIS_LOGD("%s(), panel calibrate status: 0x%02x.",
 			__func__, calibrate_status);
 
 	return calibrate_status;
@@ -341,7 +341,7 @@ int iris_parse_lut_cmds(u8 flag)
 		firmware_state |= (1<<0);
 		data[0].buf = fw->data;
 		data[0].size = fw->size;
-		IRIS_LOGI("%s(%d), request name: %s, size: %u.",
+		IRIS_LOGD("%s(%d), request name: %s, size: %u.",
 				__func__, __LINE__, IRIS_FIRMWARE_NAME, data[0].size);
 	} else {
 		IRIS_LOGE("%s(), failed to request: %s", __func__, IRIS_FIRMWARE_NAME);
@@ -381,7 +381,7 @@ int iris_parse_lut_cmds(u8 flag)
 			firmware_calibrate_status |= fw_calibrate_st;
 
 			cm_lut_opt_cnt = (ccf1_fw->size - ccf1_tail_size) / ccf1_per_pkg_size;
-			IRIS_LOGI("%s(%d), request name: %s, size: %u, option count: %u.",
+			IRIS_LOGD("%s(%d), request name: %s, size: %u, option count: %u.",
 					__func__, __LINE__,
 					ccf1_name, data[1].size, cm_lut_opt_cnt);
 		} else {
@@ -425,7 +425,7 @@ int iris_parse_lut_cmds(u8 flag)
 			firmware_calibrate_status |= fw_calibrate_st<<8;
 
 			gamma_lut_opt_cnt = (ccf2_fw->size - ccf2_tail_size) / ccf2_per_pkg_size;
-			IRIS_LOGI("%s(%d), request name: %s, size: %u, option count: %u.",
+			IRIS_LOGD("%s(%d), request name: %s, size: %u, option count: %u.",
 					__func__, __LINE__, ccf2_name, data[2].size, gamma_lut_opt_cnt);
 		} else {
 			IRIS_LOGE("%s(), invalid format for firmware: %s",
@@ -436,7 +436,7 @@ int iris_parse_lut_cmds(u8 flag)
 	}
 
 	firmware_loaded = (firmware_state == 0x07 ? FIRMWARE_LOAD_SUCCESS : FIRMWARE_LOAD_FAIL);
-	IRIS_LOGI("%s(), load firmware: %s, state: %#x",
+	IRIS_LOGD("%s(), load firmware: %s, state: %#x",
 			__func__,
 			firmware_loaded == FIRMWARE_LOAD_SUCCESS ? "success" : "fail",
 			firmware_state);
@@ -522,7 +522,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 			lut_opt_id = (i << 6 | lut_opt_id);
 			_iris_fomat_lut_cmds(lut_type, lut_opt_id);
 		}
-		IRIS_LOGI("%s(): call DBC_LUT, index: %#x.", __func__, lut_table_index);
+		IRIS_LOGD("%s(): call DBC_LUT, index: %#x.", __func__, lut_table_index);
 		break;
 
 	case CM_LUT:
@@ -534,7 +534,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(): call CM_LUT, index: %#x.", __func__, lut_table_index);
+		IRIS_LOGD("%s(): call CM_LUT, index: %#x.", __func__, lut_table_index);
 		break;
 
 	case SDR2HDR_LUT:
@@ -546,7 +546,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call SDR2HDR_LUT, index: %#x.", __func__, lut_table_index);
+		IRIS_LOGD("%s(), call SDR2HDR_LUT, index: %#x.", __func__, lut_table_index);
 		break;
 
 	case SCALER1D_LUT:
@@ -559,7 +559,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call SCALER1D, ip: %#x, index: %d.", __func__,
+		IRIS_LOGD("%s(), call SCALER1D, ip: %#x, index: %d.", __func__,
 				lut_type, lut_table_index);
 		break;
 
@@ -571,7 +571,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 				sizeof(struct dsi_cmd_desc)*iris_lut_param.hdr_lutuvy_pkt_cnt);
 
 		pcfg->iris_cmds.cmds_index += iris_lut_param.hdr_lutuvy_pkt_cnt;
-		IRIS_LOGI("%s(), ambinet hdr gain.", __func__);
+		IRIS_LOGD("%s(), ambinet hdr gain.", __func__);
 		break;
 
 	case AMBINET_SDR2HDR_LUT:
@@ -596,7 +596,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call GAMMA_LUT, index: %d.", __func__, lut_table_index);
+		IRIS_LOGD("%s(), call GAMMA_LUT, index: %d.", __func__, lut_table_index);
 		break;
 
 	case FRC_PHASE_LUT:
@@ -608,7 +608,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call FRC_PHASE_LUT, index: %d.", __func__, lut_table_index);
+		IRIS_LOGD("%s(), call FRC_PHASE_LUT, index: %d.", __func__, lut_table_index);
 		break;
 
 	case APP_CODE_LUT:
@@ -620,7 +620,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call APP_CODE_LUT, index: %d.", __func__, lut_table_index);
+		IRIS_LOGD("%s(), call APP_CODE_LUT, index: %d.", __func__, lut_table_index);
 		break;
 
 	case DPP_DITHER_LUT:
@@ -632,7 +632,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call DPP_DITHER_LUT, index: %d.", __func__, lut_table_index);
+		IRIS_LOGD("%s(), call DPP_DITHER_LUT, index: %d.", __func__, lut_table_index);
 		break;
 
 	case DTG_PHASE_LUT:
@@ -644,7 +644,7 @@ int iris_send_lut(u8 lut_type, u8 lut_table_index, u32 lut_abtable_index)
 
 		lut_opt_id = lut_table_index & 0xff;
 		_iris_fomat_lut_cmds(lut_type, lut_opt_id);
-		IRIS_LOGI("%s(), call DTG_PHASE_LUT, index: %d.", __func__, lut_table_index);
+		IRIS_LOGD("%s(), call DTG_PHASE_LUT, index: %d.", __func__, lut_table_index);
 		break;
 
 	default:

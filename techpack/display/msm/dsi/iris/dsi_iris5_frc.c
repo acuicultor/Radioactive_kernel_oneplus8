@@ -42,10 +42,10 @@ static void __iris_update_vfr_work(struct work_struct *work)
 
 	if (atomic_read(&pcfg->video_update_wo_osd) >= 4) {
 		if (iris_update_vfr(pcfg, true))
-			IRIS_LOGI("enable vfr");
+			IRIS_LOGD("enable vfr");
 	} else {
 		if (iris_update_vfr(pcfg, false))
-			IRIS_LOGI("disable vfr");
+			IRIS_LOGD("disable vfr");
 	}
 }
 
@@ -60,7 +60,7 @@ void iris_frc_low_latency(bool low_latency)
 
 	pcfg->frc_low_latency = low_latency;
 
-	IRIS_LOGI("%s(%d) low latency: %d.", __func__, __LINE__, low_latency);
+	IRIS_LOGD("%s(%d) low latency: %d.", __func__, __LINE__, low_latency);
 }
 
 void iris_set_panel_te(u8 panel_te)
@@ -90,7 +90,7 @@ void iris_frc_parameter_init(void)
 
 	timing = &pcfg->panel->cur_mode->timing;
 	refresh_rate = timing->refresh_rate;
-	IRIS_LOGI("refresh_rate: %d!", refresh_rate);
+	IRIS_LOGD("refresh_rate: %d!", refresh_rate);
 	if ((refresh_rate % 10) != 0) {
 		refresh_rate = ((refresh_rate + 5) / 10) * 10;
 		IRIS_LOGW("change refresh_rate from %d to %d!", timing->refresh_rate, refresh_rate);
@@ -172,7 +172,7 @@ int32_t iris_set_second_channel_power(bool pwr)
 		if (pcfg2->iris_osd_autorefresh_enabled)
 			IRIS_LOGW("osd_autorefresh is not disable before enable osd!");
 		else
-			IRIS_LOGI("osd_autorefresh is disable before enable osd!");
+			IRIS_LOGD("osd_autorefresh is disable before enable osd!");
 
 		if (pcfg2->panel->power_info.refcount == 0) {
 			IRIS_LOGW("%s(), AP mipi2 tx hasn't been power on.", __func__);
@@ -183,7 +183,7 @@ int32_t iris_set_second_channel_power(bool pwr)
 			else
 				compression_mode = false;
 
-			IRIS_LOGI("%s(), iris_pmu_mipi2 on.", __func__);
+			IRIS_LOGD("%s(), iris_pmu_mipi2 on.", __func__);
 
 			/*Power up BSRAM domain if need*/
 			iris_pmu_bsram_set(true);
@@ -195,7 +195,7 @@ int32_t iris_set_second_channel_power(bool pwr)
 			iris_ulps_source_sel(ULPS_NONE);
 			_iris_second_channel_pre(compression_mode);
 
-			IRIS_LOGI("%s(), mipi pwr st is true", __func__);
+			IRIS_LOGD("%s(), mipi pwr st is true", __func__);
 			pcfg2->mipi_pwr_st = true;
 		}
 	} else {	//off
@@ -207,7 +207,7 @@ int32_t iris_set_second_channel_power(bool pwr)
 		iris_update_bitmask_regval_nonread(&regval,true);
 
 		iris_pmu_mipi2_set(false);
-		IRIS_LOGI("%s(), iris_pmu_mipi2 off.", __func__);
+		IRIS_LOGD("%s(), iris_pmu_mipi2 off.", __func__);
 		pcfg2->mipi_pwr_st = false;
 	}
 
@@ -235,7 +235,7 @@ void iris_second_channel_post(u32 val)
 	/* bulksram retain on when FRC power on */
 	if (pcfg->pwil_mode == PT_MODE) {
 		if (iris_pmu_frc_get())
-			IRIS_LOGI("FRC power on, can't power off bulksram");
+			IRIS_LOGD("FRC power on, can't power off bulksram");
 		else {
 			iris_pmu_bsram_set(false);
 			if (iris_i3c_status_get() == false)
@@ -326,11 +326,11 @@ int32_t iris_osd_autorefresh(u32 val)
 
 	if (iris_disable_osd_autorefresh) {
 		pcfg->iris_osd_autorefresh = false;
-		IRIS_LOGI("%s(), osd autofresh is disable.", __func__);
+		IRIS_LOGD("%s(), osd autofresh is disable.", __func__);
 		return 0;
 	}
 
-	IRIS_LOGI("%s(%d), value: %d", __func__, __LINE__, val);
+	IRIS_LOGD("%s(%d), value: %d", __func__, __LINE__, val);
 	if (pcfg == NULL) {
 		IRIS_LOGE("%s(), no secondary display.", __func__);
 		return -EINVAL;
@@ -343,11 +343,11 @@ int32_t iris_osd_autorefresh(u32 val)
 	}
 
 	if (val) {
-		IRIS_LOGI("%s(), enable osd auto refresh", __func__);
+		IRIS_LOGD("%s(), enable osd auto refresh", __func__);
 		enable_irq(gpio_to_irq(osd_gpio));
 		pcfg->iris_osd_autorefresh = true;
 	} else {
-		IRIS_LOGI("%s(), disable osd auto refresh", __func__);
+		IRIS_LOGD("%s(), disable osd auto refresh", __func__);
 		disable_irq(gpio_to_irq(osd_gpio));
 		pcfg->iris_osd_autorefresh = false;
 	}
@@ -409,7 +409,7 @@ void iris_register_osd_irq(void *disp)
 
 	pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 	osd_gpio = pcfg->iris_osd_gpio;
-	IRIS_LOGI("%s(), for display %s, osd status gpio is %d",
+	IRIS_LOGD("%s(), for display %s, osd status gpio is %d",
 			__func__,
 			display->name, osd_gpio);
 	if (!gpio_is_valid(osd_gpio)) {
@@ -419,7 +419,7 @@ void iris_register_osd_irq(void *disp)
 	}
 
 	pdev = display->pdev;
-	IRIS_LOGI("%s, display: %s, irq: %d", __func__, display->name, gpio_to_irq(osd_gpio));
+	IRIS_LOGD("%s, display: %s, irq: %d", __func__, display->name, gpio_to_irq(osd_gpio));
 	rc = devm_request_irq(&pdev->dev, gpio_to_irq(osd_gpio), iris_osd_handler,
 			IRQF_TRIGGER_RISING, "OSD_GPIO", display);
 	if (rc) {
@@ -489,11 +489,11 @@ void iris_frc_prepare(struct iris_cfg *pcfg)
                 struct iris_cfg *pcfg0 = iris_get_cfg_by_index(DSI_PRIMARY);
 		pcfg->osd_switch_on_pending = false;
 		//schedule_work(&osd_blending_work.osd_enable_work);
-                IRIS_LOGI("%s(), set secondary channel power for osd pending", __func__);
+                IRIS_LOGD("%s(), set secondary channel power for osd pending", __func__);
                 mutex_lock(&pcfg0->panel->panel_lock);
 		iris_set_second_channel_power(true);
 		mutex_unlock(&pcfg0->panel->panel_lock);
-		IRIS_LOGI("%s(), finish setting secondary channel power", __func__);
+		IRIS_LOGD("%s(), finish setting secondary channel power", __func__);
 	}
 }
 
@@ -503,7 +503,7 @@ void iris_clean_frc_status(struct iris_cfg *pcfg)
 		pcfg->pwil_mode = PT_MODE;
 	else
 		pcfg->pwil_mode = RFB_MODE;
-	IRIS_LOGI("%s(), pwil_mode: %d", __func__, pcfg->pwil_mode);
+	IRIS_LOGD("%s(), pwil_mode: %d", __func__, pcfg->pwil_mode);
 
 	pcfg->switch_mode = IRIS_MODE_RFB;
 	pcfg->osd_enable = false;
@@ -566,7 +566,7 @@ static void iris_frc_setting_switch(bool dual)
 		pcfg->add_last_flag = pcfg->add_on_last_flag;
 		iris_scaler_filter_ratio_get();
 		pcfg->add_last_flag = add_last_flag;
-		IRIS_LOGI("update scaler filter");
+		IRIS_LOGD("update scaler filter");
 	}
 	payload = iris_get_ipopt_payload_data(IRIS_IP_DSC_ENC_2, dual ? 0xf2 : 0xf1, 2);
 	pcfg->frc_setting.memc_dsc_bpp = (payload[42] >> 8) & 0xff;
@@ -598,7 +598,7 @@ void iris_dual_setting_switch(bool dual)
 	struct iris_ctrl_opt *opt_arr = dual ? arr_dual : arr_single;
 	int len = sizeof(arr_single)/sizeof(struct iris_ctrl_opt);
 	iris_send_assembled_pkt(opt_arr, len);
-	IRIS_LOGI("iris_dual_setting_switch, dual: %d, len: %d", dual, len);
+	IRIS_LOGD("iris_dual_setting_switch, dual: %d, len: %d", dual, len);
 	iris_frc_setting_switch(dual);
 	iris_cm_setting_switch(dual);
 }
@@ -618,5 +618,5 @@ void iris_frc_dsc_setting(bool dual)
 	struct iris_ctrl_opt *opt_arr = dual ? arr_dual : arr_single;
 	int len = sizeof(arr_single)/sizeof(struct iris_ctrl_opt);
 	iris_send_assembled_pkt(opt_arr, len);
-	IRIS_LOGI("iris_frc_dsc_setting, dual: %d, len: %d", dual, len);
+	IRIS_LOGD("iris_frc_dsc_setting, dual: %d, len: %d", dual, len);
 }

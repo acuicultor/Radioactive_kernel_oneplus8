@@ -72,7 +72,7 @@ static void iris_frc_cmd_payload_init(void)
 static void iris_frc_cmd_payload_release(void)
 {
 	if (iris_frc_cmd_payload != NULL && iris_frc_cmd_payload_count != 0) {
-		IRIS_LOGI("iris_frc_cmd_payload_count: %d", iris_frc_cmd_payload_count);
+		IRIS_LOGD("iris_frc_cmd_payload_count: %d", iris_frc_cmd_payload_count);
 		iris_ocp_write_mult_vals(iris_frc_cmd_payload_count, iris_frc_cmd_payload);
 		vfree(iris_frc_cmd_payload);
 		iris_frc_cmd_payload = NULL;
@@ -101,7 +101,7 @@ void iris_rfb_mode_enter(void)
 		pcfg->pwil_mode = PT_MODE;
 	else
 		pcfg->pwil_mode = RFB_MODE;
-	IRIS_LOGI("rx_mode: %d, tx_mode: %d", pcfg->rx_mode, pcfg->tx_mode);
+	IRIS_LOGD("rx_mode: %d, tx_mode: %d", pcfg->rx_mode, pcfg->tx_mode);
 	if (pcfg->osd_enable)
 		iris_psf_mif_efifo_set(pcfg->pwil_mode, pcfg->osd_enable);
 	iris_set_pwil_mode(pcfg->panel, pcfg->pwil_mode, pcfg->osd_enable, DSI_CMD_SET_STATE_HS);
@@ -206,9 +206,9 @@ static bool iris_frc_setting_check(void)
 				frc_setting->v2_lut_index = config_table[i].index;
 				frc_setting->v2_period_phasenum = config_table[i].period_phasenum;
 				frc_setting->v2_phaselux_idx_max = config_table[i].idx_max;
-				IRIS_LOGI("inout_ratio: %d", inout_ratio);
-				IRIS_LOGI("select frc lut index: %d", frc_setting->v2_lut_index);
-				IRIS_LOGI("select frc inout ratio: %d", frc_setting->v2_period_phasenum);
+				IRIS_LOGD("inout_ratio: %d", inout_ratio);
+				IRIS_LOGD("select frc lut index: %d", frc_setting->v2_lut_index);
+				IRIS_LOGD("select frc inout ratio: %d", frc_setting->v2_period_phasenum);
 				return true;
 			}
 		}
@@ -218,9 +218,9 @@ static bool iris_frc_setting_check(void)
 				frc_setting->v2_lut_index = video_config_table[i].index;
 				frc_setting->v2_period_phasenum = video_config_table[i].period_phasenum;
 				frc_setting->v2_phaselux_idx_max = video_config_table[i].idx_max;
-				IRIS_LOGI("inout_ratio: %d", inout_ratio);
-				IRIS_LOGI("select frc lut index: %d", frc_setting->v2_lut_index);
-				IRIS_LOGI("select frc inout ratio: %d", frc_setting->v2_period_phasenum);
+				IRIS_LOGD("inout_ratio: %d", inout_ratio);
+				IRIS_LOGD("select frc lut index: %d", frc_setting->v2_lut_index);
+				IRIS_LOGD("select frc inout ratio: %d", frc_setting->v2_period_phasenum);
 				return true;
 			}
 		}
@@ -272,7 +272,7 @@ void iris_frc_mif_reg_set(void)
 	u32 disp_vtotal = iris_get_vtotal();
 	u32 memc_level = frc_setting->memc_level;
 
-	IRIS_LOGI("out_fps: %d, vtotal: %d", frc_setting->out_fps, disp_vtotal);
+	IRIS_LOGD("out_fps: %d, vtotal: %d", frc_setting->out_fps, disp_vtotal);
 
 	fmif_vd_hstride = iris_frc_video_hstride_calc(frc_setting->memc_hres, frc_setting->memc_dsc_bpp, 1);
 	fmif_vd_offset = fmif_vd_hstride * frc_setting->memc_vres * 8;
@@ -285,7 +285,7 @@ void iris_frc_mif_reg_set(void)
 
 	if (!(pcfg->dual_test & 0x2))
 		frc_setting->mv_baseaddr = 0x300000 - (4+frc_setting->mv_buf_num) * fmif_mv_frm_offset;
-	IRIS_LOGI("mv_baseaddr: %x, offset: %x", frc_setting->mv_baseaddr, fmif_mv_frm_offset);
+	IRIS_LOGD("mv_baseaddr: %x, offset: %x", frc_setting->mv_baseaddr, fmif_mv_frm_offset);
 	if ((frc_setting->video_baseaddr + 3 * fmif_vd_offset) > frc_setting->mv_baseaddr) {
 		IRIS_LOGE("buffer check failed!");
 		IRIS_LOGE("video_baseaddr: %x, offset: %x", frc_setting->video_baseaddr, fmif_vd_offset);
@@ -300,7 +300,7 @@ void iris_frc_mif_reg_set(void)
 	hsync_freq_in = frc_setting->out_fps * input_vtotal;
 	hsync_freq_out = frc_setting->out_fps * disp_vtotal;
 
-	IRIS_LOGI(" print video enter fps = %d, output fps = %d.", frc_setting->in_fps, frc_setting->out_fps);
+	IRIS_LOGD(" print video enter fps = %d, output fps = %d.", frc_setting->in_fps, frc_setting->out_fps);
 
 	carry_th = 5;
 	keep_th = 252;
@@ -326,17 +326,17 @@ void iris_frc_mif_reg_set(void)
 
 	if ((m/n) == 4) {
 		vtotal_frcc = (disp_vtotal * 2)/3;
-		IRIS_LOGI(" print m = %d, n = %d, vtotal_frcc = %d.", m, n, vtotal_frcc);
+		IRIS_LOGD(" print m = %d, n = %d, vtotal_frcc = %d.", m, n, vtotal_frcc);
 	} else if ((m/n) == 5 || (m/n) == 6) {
 		vtotal_frcc = (disp_vtotal * (m - 1))/m;
-		IRIS_LOGI(" print m = %d, n = %d, vtotal_frcc = %d.", m, n, vtotal_frcc);
+		IRIS_LOGD(" print m = %d, n = %d, vtotal_frcc = %d.", m, n, vtotal_frcc);
 	} else if ((m/n) > 6) {
 		temp = (m + n - 1)/n;
 		temp = (temp)/2;
 		temp0 = (m/n)-1;
 		temp0 = temp0 * disp_vtotal;
 		vtotal_frcc = (2*temp0)/(2*temp + 3);
-		IRIS_LOGI(" print m = %d, n = %d, vtotal_frcc = %d.", m, n, vtotal_frcc);
+		IRIS_LOGD(" print m = %d, n = %d, vtotal_frcc = %d.", m, n, vtotal_frcc);
 	}
 
 	mvc_01phase_vcnt = disp_vtotal;
@@ -677,10 +677,10 @@ void iris_fi_reg_set(void)
 			| (iris_frc_demo_window ? 1:0), 0);// set flim label
 	if (pcfg->osd_on) {
 		iris_frc_reg_add(IRIS_FI_ADDR + FI_DEMO_MODE_RING, 0x780152, 0);
-		IRIS_LOGI("Dual channel!");
+		IRIS_LOGD("Dual channel!");
 	} else {
 		iris_frc_reg_add(IRIS_FI_ADDR + FI_DEMO_MODE_RING, 0xf05a52, 0);
-		IRIS_LOGI("singl channel!");
+		IRIS_LOGD("singl channel!");
 	}
 
 	if (iris_frc_demo_window == 1) {
@@ -801,7 +801,7 @@ void iris_frc_mode_prepare(void)
 
 	if (!iris_frc_dynamic_off) {
 		if (frc_setting->in_fps_configured == frc_setting->in_fps) {
-			IRIS_LOGI("FRC setting has been configured: %d", frc_setting->in_fps);
+			IRIS_LOGD("FRC setting has been configured: %d", frc_setting->in_fps);
 			return;
 		}
 	}
@@ -905,8 +905,8 @@ static void iris_ms_pwil_ocp_update(bool force_repeat, bool var_disp_in_frc_post
 	payload = iris_get_ipopt_payload_data(IRIS_IP_PWIL, 0xF1, 2);
 	pwil_ctrl = payload[0];
 	pwil_datapath = payload[2];
-	IRIS_LOGI("%s, pwil_ctrl=%x, pwil_datapath: %x", __func__, pwil_ctrl, pwil_datapath);
-	IRIS_LOGI("%s, pwil_ad_frc_info=%x", __func__, pwil_ad_frc_info);
+	IRIS_LOGD("%s, pwil_ctrl=%x, pwil_datapath: %x", __func__, pwil_ctrl, pwil_datapath);
+	IRIS_LOGD("%s, pwil_ad_frc_info=%x", __func__, pwil_ad_frc_info);
 	iris_frc_reg_add(IRIS_PWIL_ADDR + PWIL_CTRL, pwil_ctrl, 0);
 	iris_frc_reg_add(IRIS_PWIL_ADDR + DATA_PATH_CTRL, pwil_datapath, 0);
 	if (iris_get_tx_reserve_0(&tx_reserve_0)) {
@@ -914,7 +914,7 @@ static void iris_ms_pwil_ocp_update(bool force_repeat, bool var_disp_in_frc_post
 			tx_reserve_0 |= 1<<28;
 		else
 			tx_reserve_0 &= ~(1<<28);
-		IRIS_LOGI("%s, tx_reserve_0=%x", __func__, tx_reserve_0);
+		IRIS_LOGD("%s, tx_reserve_0=%x", __func__, tx_reserve_0);
 		iris_frc_reg_add(IRIS_TX_RESERVE_0, tx_reserve_0, 0);
 	}
 	iris_frc_reg_add(IRIS_PWIL_ADDR + PWIL_PIAD_FRC_INFO, pwil_ad_frc_info, 0);
@@ -1009,7 +1009,7 @@ static void iris_rfb_mode_prepare(void)
 static void iris_download_mcu_code(void)
 {
 	iris_send_ipopt_cmds(APP_CODE_LUT, 0);
-	IRIS_LOGI("%s", __func__);
+	IRIS_LOGD("%s", __func__);
 }
 
 static void iris_mcu_sw_reset(u32 reset)
@@ -1031,7 +1031,7 @@ static bool iris_mcu_is_stop(void)
 		// u32 mcu_info_1 = iris_ocp_read(IRIS_MCU_INFO_1, DSI_CMD_SET_STATE_HS);
 		u32 mcu_info_2 = iris_ocp_read(IRIS_MCU_INFO_2, DSI_CMD_SET_STATE_HS);
 
-		IRIS_LOGI("mcu_info_2: %x", mcu_info_2);
+		IRIS_LOGD("mcu_info_2: %x", mcu_info_2);
 		if (((mcu_info_2>>8)&0x3) == 3)
 			return true;
 		else
@@ -1191,7 +1191,7 @@ void iris_mode_switch_proc(u32 mode)
 				if (iris_mcu_is_stop())
 					iris_mcu_sw_reset(1);
 				else
-					IRIS_LOGI("iris mcu not in stop, can't reset mcu");
+					IRIS_LOGD("iris mcu not in stop, can't reset mcu");
 			} else {
 				iris_mcu_sw_reset(1);
 			}
@@ -1271,7 +1271,7 @@ static int iris_get_mode(void)
 void iris_fi_demo_window(u32 DemoWinMode)
 {
 	iris_frc_demo_window = DemoWinMode;
-	IRIS_LOGI("MEMC demo window mode !");
+	IRIS_LOGD("MEMC demo window mode !");
 }
 
 int32_t iris_fi_osd_protect_window(u32 Top_left_position, u32 bottom_right_position, u32 osd_window_ctrl, u32 Enable, u32 DynCompensate)
@@ -1497,7 +1497,7 @@ void iris_set_out_frame_rate(u32 framerate)
 {
 	struct iris_cfg *pcfg = iris_get_cfg();
 
-	IRIS_LOGI("%s, default out framerate: %u, set framerate: %u",
+	IRIS_LOGD("%s, default out framerate: %u, set framerate: %u",
 			__func__, pcfg->frc_setting.out_fps, framerate);
 
 	//if (pcfg->frc_setting.default_out_fps == HIGH_FREQ) {
@@ -1506,7 +1506,7 @@ void iris_set_out_frame_rate(u32 framerate)
 	//		(framerate == HIGH_FREQ || framerate == LOW_FREQ)) {
 	pcfg->frc_setting.out_fps = framerate;
 
-	//IRIS_LOGI("%s, change framerate to: %d", __func__, framerate);
+	//IRIS_LOGD("%s, change framerate to: %d", __func__, framerate);
 	iris_dtg_frame_rate_set(framerate);
 	//}
 	//}
@@ -1523,7 +1523,7 @@ void iris_set_ap_te(u8 ap_te)
 	struct iris_cfg *pcfg = iris_get_cfg();
 
 	if (ap_te > pcfg->panel_te) {
-		IRIS_LOGI("%s, ap_te[%d] > panel_te[%d]", __func__, ap_te, pcfg->panel_te);
+		IRIS_LOGD("%s, ap_te[%d] > panel_te[%d]", __func__, ap_te, pcfg->panel_te);
 		ap_te = pcfg->panel_te;
 	}
 
@@ -1541,12 +1541,12 @@ bool iris_update_vfr(struct iris_cfg *pcfg, bool enable)
 	static u32 write_data[2];
 
 	if (!mutex_trylock(&pcfg->panel->panel_lock)) {
-		IRIS_LOGI("%s:%d panel_lock is locked!", __func__, __LINE__);
+		IRIS_LOGD("%s:%d panel_lock is locked!", __func__, __LINE__);
 		mutex_lock(&pcfg->panel->panel_lock);
 	}
 	if (!pcfg->dynamic_vfr) {
 		mutex_unlock(&pcfg->panel->panel_lock);
-		IRIS_LOGI("dynamic_vfr is disable, return");
+		IRIS_LOGD("dynamic_vfr is disable, return");
 		return false;
 	}
 
@@ -1557,7 +1557,7 @@ bool iris_update_vfr(struct iris_cfg *pcfg, bool enable)
 			frcc_pref_ctrl &= ~0x2;
 		if (frcc_pref_ctrl == pcfg->frc_setting.frcc_pref_ctrl) {
 			mutex_unlock(&pcfg->panel->panel_lock);
-			IRIS_LOGI("same frcc_pref_ctrl value, return");
+			IRIS_LOGD("same frcc_pref_ctrl value, return");
 			return false;
 		}
 		pcfg->frc_setting.frcc_pref_ctrl = frcc_pref_ctrl;

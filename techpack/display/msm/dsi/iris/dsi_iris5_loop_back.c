@@ -187,7 +187,7 @@ int iris_loop_back_validate(void)
 
 	pcfg = iris_get_cfg();
 
-	IRIS_LOGI("[%s:%d] loop back test.", __func__, __LINE__);
+	IRIS_LOGD("[%s:%d] loop back test.", __func__, __LINE__);
 
 	rc = iris_loop_back_reset();
 	if (rc) {
@@ -313,7 +313,7 @@ static ssize_t _iris_dbg_loop_back_test(struct file *file, char __user *buff,
 	ktime1 = ktime_get();
 	timeus = (u32) ktime_to_us(ktime1) - (u32)ktime_to_us(ktime0);
 	mutex_unlock(&pcfg->panel->panel_lock);
-	IRIS_LOGI("%s(), spend time %d us, return: %d", __func__, timeus, ret);
+	IRIS_LOGD("%s(), spend time %d us, return: %d", __func__, timeus, ret);
 
 
 	tot = scnprintf(bp, sizeof(bp), "0x%02x\n", ret);

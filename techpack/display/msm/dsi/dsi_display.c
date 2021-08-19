@@ -2107,12 +2107,12 @@ int dsi_display_set_power(struct drm_connector *connector,
 
 	switch (power_mode) {
 	case SDE_MODE_DPMS_LP1:
-		DSI_ERR("SDE_MODE_DPMS_LP1\n");
+		DSI_DEBUG("SDE_MODE_DPMS_LP1\n");
 		rc = dsi_panel_set_lp1(display->panel);
 		if (display->panel->aod_mode && display->panel->aod_mode != 2) {
 			display->panel->aod_status = 0;
 			rc = dsi_panel_set_aod_mode(display->panel, 5);
-			DSI_ERR("Send dsi_panel_set_aod_mode 5 cmds\n");
+			DSI_DEBUG("Send dsi_panel_set_aod_mode 5 cmds\n");
 			if (rc) {
 				DSI_ERR("[%s] failed to send dsi_panel_set_aod_mode cmds, rc=%d\n",
 					display->panel->name, rc);
@@ -2120,22 +2120,22 @@ int dsi_display_set_power(struct drm_connector *connector,
 		}
 		blank = DRM_PANEL_BLANK_AOD;
 		notifier_data.data = &blank;
-		DSI_ERR("DRM_PANEL_BLANK_AOD\n");
+		DSI_DEBUG("DRM_PANEL_BLANK_AOD\n");
 		if (lcd_active_panel)
 			drm_panel_notifier_call_chain(lcd_active_panel, DRM_PANEL_EARLY_EVENT_BLANK, &notifier_data);
 	case SDE_MODE_DPMS_LP2:
-		DSI_ERR("SDE_MODE_DPMS_LP2\n");
+		DSI_DEBUG("SDE_MODE_DPMS_LP2\n");
 		rc = dsi_panel_set_lp2(display->panel);
 		break;
 	case SDE_MODE_DPMS_ON:
-		DSI_ERR("SDE_MODE_DPMS_ON\n");
+		DSI_DEBUG("SDE_MODE_DPMS_ON\n");
 		if (display->panel->power_mode == SDE_MODE_DPMS_LP1 ||
 			display->panel->power_mode == SDE_MODE_DPMS_LP2)
 			rc = dsi_panel_set_nolp(display->panel);
 		/* send screen on cmd for tp start */
 		blank = DRM_PANEL_BLANK_UNBLANK_CUST;
 		notifier_data.data = &blank;
-		DSI_ERR("DRM_PANEL_BLANK_UNBLANK_CUST\n");
+		DSI_DEBUG("DRM_PANEL_BLANK_UNBLANK_CUST\n");
 		if (lcd_active_panel)
 			drm_panel_notifier_call_chain(lcd_active_panel, DRM_PANEL_EARLY_EVENT_BLANK, &notifier_data);
 #ifdef CONFIG_F2FS_OF2FS
@@ -2149,7 +2149,7 @@ int dsi_display_set_power(struct drm_connector *connector,
 		/* send screen off cmd for tp start */
 		blank = DRM_PANEL_BLANK_POWERDOWN_CUST;
 		notifier_data.data = &blank;
-		DSI_ERR("DRM_PANEL_BLANK_POWERDOWN_CUST\n");
+		DSI_DEBUG("DRM_PANEL_BLANK_POWERDOWN_CUST\n");
 		if (lcd_active_panel)
 			drm_panel_notifier_call_chain(lcd_active_panel, DRM_PANEL_EARLY_EVENT_BLANK, &notifier_data);
 #ifdef CONFIG_F2FS_OF2FS
@@ -7939,9 +7939,9 @@ int dsi_display_set_mode(struct dsi_display *display,
 		goto error;
 	}
 
-	DSI_INFO("mdp_transfer_time_us=%d us\n",
+	DSI_DEBUG("mdp_transfer_time_us=%d us\n",
 			adj_mode.priv_info->mdp_transfer_time_us);
-	DSI_INFO("hactive= %d,vactive= %d,fps=%d\n",
+	DSI_DEBUG("hactive= %d,vactive= %d,fps=%d\n",
 			timing.h_active, timing.v_active,
 			timing.refresh_rate);
 

@@ -2241,7 +2241,7 @@ static void p9415_update_work_process(struct work_struct *work)
 		return;
 	}
 
-	pr_err("<IDT UPDATE> p9415_update_work_process\n");
+	pr_debug("<IDT UPDATE> p9415_update_work_process\n");
 
 	if (!chip->check_fw_update) {
 		if (wlchg_get_usbin_val() == 0) {

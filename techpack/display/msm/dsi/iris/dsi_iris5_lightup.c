@@ -109,7 +109,7 @@ void iris_init(struct dsi_display *display, struct dsi_panel *panel)
 {
 	struct iris_cfg *pcfg = iris_get_cfg();
 
-	IRIS_LOGI("%s(), for dispaly: %s, panel: %s, cfg index: %d",
+	IRIS_LOGD("%s(), for dispaly: %s, panel: %s, cfg index: %d",
 			__func__,
 			display->display_type, panel->name, gcfg_index);
 	pcfg->display = display;
@@ -208,7 +208,7 @@ void iris_power_on(struct dsi_panel *panel)
 	if (!iris_is_chip_supported())
 		return;
 
-	IRIS_LOGI("%s(), for [%s] %s, cfg index: %i, secondary: %s",
+	IRIS_LOGD("%s(), for [%s] %s, cfg index: %i, secondary: %s",
 			__func__,
 			panel->name, panel->type, gcfg_index,
 			panel->is_secondary ? "true" : "false");
@@ -239,11 +239,11 @@ void iris_reset(void)
 	if (!iris_is_chip_supported())
 		return;
 
-	IRIS_LOGI("%s()", __func__);
+	IRIS_LOGD("%s()", __func__);
 
 #ifndef IRIS_HDK_DEV // skip ext clk
 	if (pcfg->ext_clk) {
-		IRIS_LOGI("%s(), enable ext clk", __func__);
+		IRIS_LOGD("%s(), enable ext clk", __func__);
 		clk_prepare_enable(pcfg->ext_clk);
 		usleep_range(5000, 5001);
 	} else { // No need to control vdd and clk
@@ -268,7 +268,7 @@ void iris_power_off(struct dsi_panel *panel)
 	if (!iris_is_chip_supported())
 		return;
 
-	IRIS_LOGI("%s(), for [%s] %s, cfg index: %i, secondary: %s",
+	IRIS_LOGD("%s(), for [%s] %s, cfg index: %i, secondary: %s",
 			__func__,
 			panel->name, panel->type, gcfg_index,
 			panel->is_secondary ? "true" : "false");
@@ -287,7 +287,7 @@ void iris_power_off(struct dsi_panel *panel)
 		iris_control_pwr_regulator(false);
 
 	if (pcfg->ext_clk) {
-		IRIS_LOGI("%s(), disable ext clk", __func__);
+		IRIS_LOGD("%s(), disable ext clk", __func__);
 		clk_disable_unprepare(pcfg->ext_clk);
 	}
 	iris_reset_off();
@@ -569,7 +569,7 @@ static int32_t _iris_alloc_desc_buf(struct dsi_cmd_desc **cmds, int cmd_cnt)
 		IRIS_LOGE("%s(), failed to malloc space for dsi", __func__);
 		return -ENOMEM;
 	}
-	IRIS_LOGI("%s(), alloc %p, count %d", __func__, *cmds, cmd_cnt);
+	IRIS_LOGD("%s(), alloc %p, count %d", __func__, *cmds, cmd_cnt);
 
 	return 0;
 }
@@ -849,7 +849,7 @@ static void _iris_print_ipopt(struct iris_ip_index  *pip_index)
 		for (j = 0; j < pip_index[i].opt_cnt; j++) {
 			struct iris_ip_opt *popt = &(pip_index[i].opt[j]);
 
-			IRIS_LOGI("%s(%d), ip: %02x, opt: %02x, cmd: %p, len: %d, link state: %#x",
+			IRIS_LOGD("%s(%d), ip: %02x, opt: %02x, cmd: %p, len: %d, link state: %#x",
 					__func__, __LINE__,
 					i, popt->opt_id, popt->cmd, popt->cmd_cnt, popt->link_state);
 		}
@@ -876,7 +876,7 @@ static void _iris_parse_appversion(
 	pcfg->app_date[1] = (app_date >> 8) & 0xff;
 	pcfg->app_date[2] = (app_date >> 16) & 0xff;
 	pcfg->app_date[3] = (app_date >> 24) & 0xff;
-	IRIS_LOGI("%s(), iris fw version: %d, [date]%d:%d:%d:%d",
+	IRIS_LOGD("%s(), iris fw version: %d, [date]%d:%d:%d:%d",
 			__func__,
 			pcfg->app_version,
 			pcfg->app_date[3],
@@ -1172,10 +1172,10 @@ static int32_t _iris_parse_lut_mode(
 			pcfg->lut_mode = INTERPOLATION_MODE;
 	} else { /*default value is 0*/
 		pcfg->lut_mode = INTERPOLATION_MODE;
-		IRIS_LOGI("no lut mode set, use default");
+		IRIS_LOGD("no lut mode set, use default");
 	}
 
-	IRIS_LOGI("pxlw,lut-mode: %d", pcfg->lut_mode);
+	IRIS_LOGD("pxlw,lut-mode: %d", pcfg->lut_mode);
 	return 0;
 }
 
@@ -1190,7 +1190,7 @@ static int32_t _iris_parse_split_pkt_info(
 		IRIS_LOGE("can not get property: pxlw,pkt-payload-size");
 		return rc;
 	}
-	IRIS_LOGI("pxlw,split-pkt-payload-size: %d", pcfg->split_pkt_size);
+	IRIS_LOGD("pxlw,split-pkt-payload-size: %d", pcfg->split_pkt_size);
 
 	rc = of_property_read_u32(np, "pxlw,last-for-per-pkt",
 			&(pcfg->add_on_last_flag));
@@ -1347,7 +1347,7 @@ static void _iris_save_cmd_count(const struct iris_ip_index *pip_index,
 		return;
 	}
 
-	IRIS_LOGI("%s(), doesn't save count for type %#x pip index %p",
+	IRIS_LOGD("%s(), doesn't save count for type %#x pip index %p",
 			__func__, idx_type, pip_index);
 }
 
@@ -1527,7 +1527,7 @@ int32_t iris_parse_optional_seq(struct device_node *np, const uint8_t *key,
 
 	seq_cnt = _iris_parse_cmd_seq_data(np, key, &pdata);
 	if (seq_cnt <= 0) {
-		IRIS_LOGI("%s(), [optional] without sequence for %s, seq_cnt %d",
+		IRIS_LOGD("%s(), [optional] without sequence for %s, seq_cnt %d",
 				__func__, key, seq_cnt);
 		return 0;
 	}
@@ -1581,7 +1581,7 @@ static int32_t _iris_parse_tx_mode(
 	else
 		pcfg->pwil_mode = RFB_MODE;
 
-	IRIS_LOGI("%s(), pwil mode: %d", __func__, pcfg->pwil_mode);
+	IRIS_LOGD("%s(), pwil mode: %d", __func__, pcfg->pwil_mode);
 	return 0;
 }
 
@@ -1629,7 +1629,7 @@ int iris_parse_param(struct dsi_display *display)
 
 	pcfg->valid = PARAM_EMPTY;	/* empty */
 
-	IRIS_LOGI("%s(%d), enter.", __func__, __LINE__);
+	IRIS_LOGD("%s(%d), enter.", __func__, __LINE__);
 	if (!display || !display->pdev->dev.of_node || !display->panel_node) {
 		IRIS_LOGE("the param is null");
 		return -EINVAL;
@@ -1652,7 +1652,7 @@ int iris_parse_param(struct dsi_display *display)
 		IRIS_LOGE("%s(), failed to find lightup node", __func__);
 		return -EINVAL;
 	}
-	IRIS_LOGI("%s(), lightup node: %s", __func__, lightup_node->name);
+	IRIS_LOGD("%s(), lightup node: %s", __func__, lightup_node->name);
 
 	rc = _iris_parse_split_pkt_info(lightup_node, pcfg);
 	if (rc) {
@@ -1677,7 +1677,7 @@ int iris_parse_param(struct dsi_display *display)
 
 	rc = iris_parse_timing_switch_info(lightup_node, pcfg);
 	if (rc)
-		IRIS_LOGI("%s, [optional] have not timing switch info", __func__);
+		IRIS_LOGD("%s, [optional] have not timing switch info", __func__);
 
 	rc = iris_parse_default_pq_param(lightup_node, pcfg);
 	if (rc) {
@@ -1728,7 +1728,7 @@ int iris_parse_param(struct dsi_display *display)
 	INIT_WORK(&pcfg->cont_splash_work, __cont_splash_work_handler);
 
 	pcfg->valid = PARAM_PARSED;	/* parse ok */
-	IRIS_LOGI("%s(%d), exit.", __func__, __LINE__);
+	IRIS_LOGD("%s(%d), exit.", __func__, __LINE__);
 
 	return 0;
 }
@@ -1797,7 +1797,7 @@ void iris_print_desc_cmds(struct dsi_cmd_desc *p, int cmd_cnt, int state)
 	struct dsi_cmd_desc *pcmd = NULL;
 	int str_len = 0;//CID99296
 
-	IRIS_LOGI("%s(), cmd len: %d, state: %s", __func__, cmd_cnt,
+	IRIS_LOGD("%s(), cmd len: %d, state: %s", __func__, cmd_cnt,
 			(state == DSI_CMD_SET_STATE_HS) ? "high speed" : "low power");
 
 	for (i = 0; i < cmd_cnt; i++) {
@@ -2326,7 +2326,7 @@ static int _iris_read_chip_id(void)
 	// else
 	pcfg->chip_id = 0;
 
-	IRIS_LOGI("%s(), chip version: %#x, chip id: %#x",
+	IRIS_LOGD("%s(), chip version: %#x, chip id: %#x",
 			__func__, pcfg->chip_ver, pcfg->chip_id);
 
 	return pcfg->chip_id;
@@ -2388,7 +2388,7 @@ void iris_free_ipopt_buf(uint32_t ip_type)
 	 * cmd buffer is continus memory, so only free once on start address
 	 */
 	if (pdesc_addr != NULL) {
-		IRIS_LOGI("%s(), free desc cmd buffer %p, type %#x", __func__, pdesc_addr, ip_type);
+		IRIS_LOGD("%s(), free desc cmd buffer %p, type %#x", __func__, pdesc_addr, ip_type);
 		vfree(pdesc_addr);
 		pdesc_addr = NULL;
 	}
@@ -2400,7 +2400,7 @@ void iris_free_seq_space(void)
 
 	/* free cmd to sent buffer, which alloc in "iris_alloc_seq_space()" */
 	if (pcfg->iris_cmds.iris_cmds_buf != NULL) {
-		IRIS_LOGI("%s(), free %p", __func__, pcfg->iris_cmds.iris_cmds_buf);
+		IRIS_LOGD("%s(), free %p", __func__, pcfg->iris_cmds.iris_cmds_buf);
 		vfree(pcfg->iris_cmds.iris_cmds_buf);
 		pcfg->iris_cmds.iris_cmds_buf = NULL;
 	}
@@ -2413,7 +2413,7 @@ void iris_alloc_seq_space(void)
 	struct iris_cfg *pcfg = iris_get_cfg();
 	int sum = pcfg->dtsi_cmds_cnt + pcfg->lut_cmds_cnt;
 
-	IRIS_LOGI("%s(), seq = %u, lut = %u", __func__,
+	IRIS_LOGD("%s(), seq = %u, lut = %u", __func__,
 			pcfg->dtsi_cmds_cnt, pcfg->lut_cmds_cnt);
 
 	sum *= sizeof(struct dsi_cmd_desc);
@@ -2424,7 +2424,7 @@ void iris_alloc_seq_space(void)
 	}
 	pcfg->iris_cmds.iris_cmds_buf = pdesc;
 
-	IRIS_LOGI("%s(), alloc %p", __func__, pcfg->iris_cmds.iris_cmds_buf);
+	IRIS_LOGD("%s(), alloc %p", __func__, pcfg->iris_cmds.iris_cmds_buf);
 	_iris_reset_out_cmds();
 
 	// Need to init PQ parameters here for video panel.
@@ -2437,7 +2437,7 @@ static void _iris_load_mcu(void)
 	u32 values[2] = {0xF00000C8, 0x1};
 	struct iris_ctrl_opt ctrl_opt;
 
-	IRIS_LOGI("%s(%d): load and run mcu", __func__, __LINE__);
+	IRIS_LOGD("%s(%d): load and run mcu", __func__, __LINE__);
 	ctrl_opt.ip = APP_CODE_LUT;
 	ctrl_opt.opt_id = 0;
 	ctrl_opt.skip_last = 0;
@@ -2498,7 +2498,7 @@ void _iris_read_power_mode(struct dsi_panel *panel)
 	};
 	struct iris_cfg *pcfg = iris_get_cfg();
 
-	IRIS_LOGI("%s(%d), abyp mode: %d", __func__, __LINE__,
+	IRIS_LOGD("%s(%d), abyp mode: %d", __func__, __LINE__,
 			pcfg->abypss_ctrl.abypass_mode);
 	if (pcfg->abypss_ctrl.abypass_mode == ANALOG_BYPASS_MODE) {
 		iris_dsi_send_cmds(panel, cmdset.cmds, cmdset.count, cmdset.state);
@@ -2510,7 +2510,7 @@ void _iris_read_power_mode(struct dsi_panel *panel)
 	}
 	pcfg->power_mode = read_cmd_rbuf[0];
 
-	IRIS_LOGI("%s(), power mode: 0x%02x", __func__, pcfg->power_mode);
+	IRIS_LOGD("%s(), power mode: 0x%02x", __func__, pcfg->power_mode);
 }
 
 int iris_lightup(struct dsi_panel *panel,
@@ -2525,7 +2525,7 @@ int iris_lightup(struct dsi_panel *panel,
 	int rc;
 	struct iris_cfg *pcfg = iris_get_cfg();
 
-	IRIS_LOGI("%s(%d), mode: %s(%d) +++", __func__, __LINE__,
+	IRIS_LOGD("%s(%d), mode: %s(%d) +++", __func__, __LINE__,
 			pcfg->abypss_ctrl.abypass_mode == PASS_THROUGH_MODE ? "PT" : "ABYP",
 			pcfg->abypss_ctrl.abypass_mode);
 
@@ -2552,7 +2552,7 @@ int iris_lightup(struct dsi_panel *panel,
 
 	/*use to debug cont splash*/
 	if (type == IRIS_CONT_SPLASH_LK) {
-		IRIS_LOGI("%s(%d), enter cont splash", __func__, __LINE__);
+		IRIS_LOGD("%s(%d), enter cont splash", __func__, __LINE__);
 		_iris_send_cont_splash_pkt(IRIS_CONT_SPLASH_LK);
 	} else {
 		_iris_send_lightup_pkt();
@@ -2572,7 +2572,7 @@ int iris_lightup(struct dsi_panel *panel,
 		_iris_send_panel_cmd(panel, on_cmds);
 
 	if (type == IRIS_CONT_SPLASH_LK)
-		IRIS_LOGI("%s(), exit cont splash", __func__);
+		IRIS_LOGD("%s(), exit cont splash", __func__);
 	else
 		/*continuous splahs should not use dma setting low power*/
 		iris_lp_init();
@@ -2597,13 +2597,13 @@ int iris_lightup(struct dsi_panel *panel,
 
 	timeus0 = (u32) ktime_to_us(ktime1) - (u32)ktime_to_us(ktime0);
 	timeus1 = (u32) ktime_to_us(ktime_get()) - (u32)ktime_to_us(ktime1);
-	IRIS_LOGI("%s() spend time0 %d us, time1 %d us.",
+	IRIS_LOGD("%s() spend time0 %d us, time1 %d us.",
 			__func__, timeus0, timeus1);
 
 #ifdef IRIS_MIPI_TEST
 	_iris_read_power_mode(panel);
 #endif
-	IRIS_LOGI("%s(), end +++", __func__);
+	IRIS_LOGD("%s(), end +++", __func__);
 
 	return 0;
 }
@@ -2622,7 +2622,7 @@ int iris_enable(struct dsi_panel *panel, struct dsi_panel_cmd_set *on_cmds)
 
 	if (panel->is_secondary) {
 		if (pcfg->iris_osd_autorefresh) {
-			IRIS_LOGI("reset iris_osd_autorefresh");
+			IRIS_LOGD("reset iris_osd_autorefresh");
 			iris_osd_autorefresh(0);
 		}
 		return rc;
@@ -2643,7 +2643,7 @@ int iris_enable(struct dsi_panel *panel, struct dsi_panel_cmd_set *on_cmds)
 	}
 #endif
 
-	IRIS_LOGI("%s(), mode:%d, rate: %d, v: %d, on_opt:0x%x",
+	IRIS_LOGD("%s(), mode:%d, rate: %d, v: %d, on_opt:0x%x",
 			__func__,
 			pcfg->abypss_ctrl.abypass_mode,
 			panel->cur_mode->timing.refresh_rate,
@@ -2665,7 +2665,7 @@ int iris_enable(struct dsi_panel *panel, struct dsi_panel_cmd_set *on_cmds)
 	if (lightup_opt & 0x1) {
 		if (on_cmds != NULL)
 			rc = iris_dsi_send_cmds(panel, on_cmds->cmds, on_cmds->count, on_cmds->state);
-		IRIS_LOGI("%s(), force ABYP lightup.", __func__);
+		IRIS_LOGD("%s(), force ABYP lightup.", __func__);
 		return rc;
 	}
 
@@ -2718,9 +2718,9 @@ int iris_set_aod(struct dsi_panel *panel, bool aod)
 	if (panel->is_secondary)
 		return rc;
 
-	IRIS_LOGI("%s(%d), aod: %d", __func__, __LINE__, aod);
+	IRIS_LOGD("%s(%d), aod: %d", __func__, __LINE__, aod);
 	if (pcfg->aod == aod) {
-		IRIS_LOGI("[%s:%d] aod: %d no change", __func__, __LINE__, aod);
+		IRIS_LOGD("[%s:%d] aod: %d no change", __func__, __LINE__, aod);
 		return rc;
 	}
 
@@ -2958,7 +2958,7 @@ void iris_send_cont_splash(struct dsi_display *display)
 		return;
 
 	if (pcfg->ext_clk) {
-		IRIS_LOGI("%s(), enable ext clk", __func__);
+		IRIS_LOGD("%s(), enable ext clk", __func__);
 		clk_prepare_enable(pcfg->ext_clk);
 	}
 
@@ -2993,7 +2993,7 @@ int iris_lightoff(struct dsi_panel *panel,
 
 	iris_set_cfg_index(DSI_PRIMARY);
 
-	IRIS_LOGI("%s(%d), mode: %s(%d) ---", __func__, __LINE__,
+	IRIS_LOGD("%s(%d), mode: %s(%d) ---", __func__, __LINE__,
 			pcfg->abypss_ctrl.abypass_mode == PASS_THROUGH_MODE ? "PT" : "ABYP",
 			pcfg->abypss_ctrl.abypass_mode);
 	if (off_cmds) {
@@ -3009,7 +3009,7 @@ int iris_lightoff(struct dsi_panel *panel,
 	pcfg->iris_initialized = false;
 	iris_set_pinctrl_state(pcfg, false);
 
-	IRIS_LOGI("%s(%d) ---", __func__, __LINE__);
+	IRIS_LOGD("%s(%d) ---", __func__, __LINE__);
 
 	return 0;
 }
@@ -3367,7 +3367,7 @@ int iris_set_pending_panel_brightness(int32_t pending, int32_t delay, int32_t le
 	struct iris_cfg *pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 
 	if (pcfg) {
-		IRIS_LOGI("set pending panel %d, %d, %d", pending, delay, level);
+		IRIS_LOGD("set pending panel %d, %d, %d", pending, delay, level);
 		pcfg->panel_pending = pending;
 		pcfg->panel_delay = delay;
 		pcfg->panel_level = level;
@@ -3403,7 +3403,7 @@ int iris_sync_panel_brightness(int32_t step, void *phys_enc)
 	pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 
 	if (pcfg->panel_pending == step) {
-		IRIS_LOGI("sync pending panel %d %d,%d,%d",
+		IRIS_LOGD("sync pending panel %d %d,%d,%d",
 				step, pcfg->panel_pending, pcfg->panel_delay,
 				pcfg->panel_level);
 		SDE_ATRACE_BEGIN("sync_panel_brightness");
@@ -3494,7 +3494,7 @@ static ssize_t _iris_dbg_i2c_write(struct file *file, const char __user *buff,
 
 	if (kstrtoul_from_user(buff, count, 0, &val))
 		return -EFAULT;
-	IRIS_LOGI("%s(%d)", __func__, __LINE__);
+	IRIS_LOGD("%s(%d)", __func__, __LINE__);
 
 	//single write
 	header = 0xFFFFFFF4;
@@ -3502,7 +3502,7 @@ static ssize_t _iris_dbg_i2c_write(struct file *file, const char __user *buff,
 	arr[1] = 0x12345678;
 
 	is_ulps_enable = iris_ulps_enable_get();
-	IRIS_LOGI("%s(%d), is_ulps_enable = %d", __func__, __LINE__, is_ulps_enable);
+	IRIS_LOGD("%s(%d), is_ulps_enable = %d", __func__, __LINE__, is_ulps_enable);
 	if (is_ulps_enable)
 		iris_ulps_source_sel(ULPS_NONE);
 	ret = iris_i2c_ocp_write(arr, 1, 0);
@@ -3528,7 +3528,7 @@ static ssize_t _iris_dbg_i2c_read(struct file *file, char __user *buff,
 	arr[0] = 0xf0000000;
 
 	is_ulps_enable = iris_ulps_enable_get();
-	IRIS_LOGI("%s(%d), is_ulps_enable = %d", __func__, __LINE__, is_ulps_enable);
+	IRIS_LOGD("%s(%d), is_ulps_enable = %d", __func__, __LINE__, is_ulps_enable);
 	if (is_ulps_enable)
 		iris_ulps_source_sel(ULPS_NONE);
 	ret = iris_i2c_ocp_read(arr, cnt, is_burst);
@@ -3539,7 +3539,7 @@ static ssize_t _iris_dbg_i2c_read(struct file *file, char __user *buff,
 		IRIS_LOGE("%s(%d), ret = %d", __func__, __LINE__, ret);
 	} else {
 		for (i = 0; i < cnt; i++)
-			IRIS_LOGI("%s(%d), arr[%d] = %x", __func__, __LINE__, i, arr[i]);
+			IRIS_LOGD("%s(%d), arr[%d] = %x", __func__, __LINE__, i, arr[i]);
 	}
 	return 0;
 }
@@ -3575,7 +3575,7 @@ static ssize_t _iris_list_debug(struct file *file,
 	if (payload == NULL)
 		return -EFAULT;
 
-	IRIS_LOGI("%s: %x %x %x %x", __func__, ip, opt_id, pos, value);
+	IRIS_LOGD("%s: %x %x %x %x", __func__, ip, opt_id, pos, value);
 
 	iris_set_ipopt_payload_data(ip, opt_id, pos, value);
 
@@ -3680,7 +3680,7 @@ static int _iris_dev_probe(struct platform_device *pdev)
 	if (!iris_is_chip_supported())
 		return 0;
 
-	IRIS_LOGI("%s()", __func__);
+	IRIS_LOGD("%s()", __func__);
 	if (!pdev || !pdev->dev.of_node) {
 		IRIS_LOGE("%s(), pdev not found", __func__);
 		return -ENODEV;
@@ -3713,7 +3713,7 @@ static int _iris_dev_remove(struct platform_device *pdev)
 {
 	struct iris_cfg *pcfg = dev_get_drvdata(&pdev->dev);
 
-	IRIS_LOGI("%s()", __func__);
+	IRIS_LOGD("%s()", __func__);
 	if (!iris_is_chip_supported())
 		return 0;
 

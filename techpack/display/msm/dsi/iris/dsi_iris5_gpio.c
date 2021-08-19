@@ -65,7 +65,7 @@ int iris_set_pinctrl_state(void *cfg, bool enable)
 	struct pinctrl_state *state;
 	struct iris_cfg *pcfg = cfg;
 
-	IRIS_LOGI("%s(), set state: %s", __func__,
+	IRIS_LOGD("%s(), set state: %s", __func__,
 			enable?"active":"suspend");
 	if (enable)
 		state = pcfg->pinctrl.active;
@@ -89,7 +89,7 @@ int iris_init_one_wired(void)
 
 	one_wired_gpio = pcfg->iris_wakeup_gpio;
 
-	IRIS_LOGI("%s(%d)", __func__, __LINE__);
+	IRIS_LOGD("%s(%d)", __func__, __LINE__);
 
 	if (!gpio_is_valid(one_wired_gpio)) {
 		pcfg->abypss_ctrl.analog_bypass_disable = true;
@@ -135,7 +135,7 @@ void iris_send_one_wired_cmd(IRIS_ONE_WIRE_TYPE type)
 	start_end_delay = 16 * 16 * 16 * 10 / POR_CLOCK;  /*us*/
 	pulse_delay = gpio_pulse_delay;  /*us*/
 
-	IRIS_LOGI("%s(), type: %d, pulse delay: %d, gpio cmd delay: %d",
+	IRIS_LOGD("%s(), type: %d, pulse delay: %d, gpio cmd delay: %d",
 			__func__, type, pulse_delay, gpio_cmd_delay);
 
 	spin_lock_irqsave(&pcfg->iris_1w_lock, flags);
@@ -162,7 +162,7 @@ int iris_check_abyp_ready(void)
 		return -EFAULT;
 	}
 	iris_abyp_ready_gpio = gpio_get_value(pcfg->iris_abyp_ready_gpio);
-	IRIS_LOGI("%s(), ABYP status: %d.", __func__, iris_abyp_ready_gpio);
+	IRIS_LOGD("%s(), ABYP status: %d.", __func__, iris_abyp_ready_gpio);
 
 	return iris_abyp_ready_gpio;
 }
@@ -179,35 +179,35 @@ int iris_parse_gpio(void *dev, void *cfg)
 		return -EINVAL;
 	}
 
-	IRIS_LOGI("%s(), for [%s], panel type: %s, is secondary: %s",
+	IRIS_LOGD("%s(), for [%s], panel type: %s, is secondary: %s",
 			__func__,
 			panel->name, panel->type,
 			panel->is_secondary ? "true" : "false");
 
 	pcfg->iris_wakeup_gpio = of_get_named_gpio(of_node,
 			"qcom,iris-wakeup-gpio", 0);
-	IRIS_LOGI("%s(), wakeup gpio %d", __func__,
+	IRIS_LOGD("%s(), wakeup gpio %d", __func__,
 			pcfg->iris_wakeup_gpio);
 	if (!gpio_is_valid(pcfg->iris_wakeup_gpio))
 		IRIS_LOGW("%s(), wake up gpio is not specified", __func__);
 
 	pcfg->iris_abyp_ready_gpio = of_get_named_gpio(of_node,
 			"qcom,iris-abyp-ready-gpio", 0);
-	IRIS_LOGI("%s(), abyp ready status gpio %d", __func__,
+	IRIS_LOGD("%s(), abyp ready status gpio %d", __func__,
 			pcfg->iris_abyp_ready_gpio);
 	if (!gpio_is_valid(pcfg->iris_abyp_ready_gpio))
 		IRIS_LOGW("%s(), abyp ready gpio is not specified", __func__);
 
 	pcfg->iris_reset_gpio = of_get_named_gpio(of_node,
 			"qcom,iris-reset-gpio", 0);
-	IRIS_LOGI("%s(), iris reset gpio %d", __func__,
+	IRIS_LOGD("%s(), iris reset gpio %d", __func__,
 			pcfg->iris_reset_gpio);
 	if (!gpio_is_valid(pcfg->iris_reset_gpio))
 		IRIS_LOGW("%s(), iris reset gpio is not specified", __func__);
 
 	pcfg->iris_vdd_gpio = of_get_named_gpio(of_node,
 			"qcom,iris-vdd-gpio", 0);
-	IRIS_LOGI("%s(), iris vdd gpio %d", __func__,
+	IRIS_LOGD("%s(), iris vdd gpio %d", __func__,
 			pcfg->iris_vdd_gpio);
 	if (!gpio_is_valid(pcfg->iris_vdd_gpio))
 		IRIS_LOGW("%s(), iris vdd gpio not specified", __func__);
@@ -229,7 +229,7 @@ void iris_request_gpio(void)
 	struct iris_cfg *pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 	struct dsi_panel *panel = pcfg->panel;
 
-	IRIS_LOGI("%s(), for [%s] %s, secondary: %i",
+	IRIS_LOGD("%s(), for [%s] %s, secondary: %i",
 			__func__,
 			panel->name, panel->type, panel->is_secondary);
 	if (panel->is_secondary)
@@ -266,7 +266,7 @@ void iris_release_gpio(void *cfg)
 	struct iris_cfg *pcfg = cfg;
 	struct dsi_panel *panel = pcfg->panel;
 
-	IRIS_LOGI("%s(), for [%s] %s, secondary: %i",
+	IRIS_LOGD("%s(), for [%s] %s, secondary: %i",
 			__func__,
 			panel->name, panel->type, panel->is_secondary);
 	if (panel->is_secondary)
@@ -297,7 +297,7 @@ void iris_enable_vdd(void)
 	int rc = 0;
 	struct iris_cfg *pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 
-	IRIS_LOGI("%s(), vdd enable", __func__);
+	IRIS_LOGD("%s(), vdd enable", __func__);
 	rc = gpio_direction_output(pcfg->iris_vdd_gpio, IRIS_GPIO_HIGH);
 	if (rc)
 		IRIS_LOGE("%s(), unable to set dir for iris vdd gpio, return: %d",
@@ -327,12 +327,12 @@ void iris_reset_chip(void)
 		return;
 	}
 
-	IRIS_LOGI("%s(), reset start", __func__);
+	IRIS_LOGD("%s(), reset start", __func__);
 	gpio_set_value(pcfg->iris_reset_gpio, IRIS_GPIO_LOW);
 	usleep_range(1000, 1001);
 	gpio_set_value(pcfg->iris_reset_gpio, IRIS_GPIO_HIGH);
 	usleep_range(2000, 2001);
-	IRIS_LOGI("%s(), reset end", __func__);
+	IRIS_LOGD("%s(), reset end", __func__);
 }
 
 void iris_reset_off(void)

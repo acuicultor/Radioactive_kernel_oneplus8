@@ -315,7 +315,7 @@ void iris_write_test(struct dsi_panel *panel, u32 iris_addr,
 		break;
 	}
 
-	IRIS_LOGI("%s(), len: %d, iris addr: %#x, test value: %#x",
+	IRIS_LOGD("%s(), len: %d, iris addr: %#x, test value: %#x",
 			__func__,
 			ocp_cmd.cmd_len, iris_addr, test_value);
 	iris_cmd.msg.tx_len = ocp_cmd.cmd_len;
@@ -396,7 +396,7 @@ void iris_write_test_muti_pkt(struct dsi_panel *panel,
 		break;
 	}
 
-	IRIS_LOGI("%s(), total count: %#x, iris addr: %#x, test value: %#x",
+	IRIS_LOGD("%s(), total count: %#x, iris addr: %#x, test value: %#x",
 			__func__, total_cnt, iris_addr, test_value);
 	iris_dsi_send_cmds(panel, iris_test_cmd, total_cnt, DSI_CMD_SET_STATE_HS);
 
@@ -824,7 +824,7 @@ static void _iris_pt_write_panel_cmd(
 	}
 
 	if (cmdset->count == 0) {
-		IRIS_LOGI("%s(), invalid cmdset count!", __func__);
+		IRIS_LOGD("%s(), invalid cmdset count!", __func__);
 		return;
 	}
 
@@ -1075,7 +1075,7 @@ void iris_set_pwil_mode(struct dsi_panel *pane,
 			pcfg->panel->cur_mode->priv_info->dsc_enabled)
 		pwil_mode[0] |= 0x10;
 
-	IRIS_LOGI("%s(), set pwil mode: %x, %x", __func__, pwil_mode[0], pwil_mode[1]);
+	IRIS_LOGD("%s(), set pwil mode: %x, %x", __func__, pwil_mode[0], pwil_mode[1]);
 
 	iris_dsi_send_cmds(pcfg->panel, panel_cmds.cmds,
 			panel_cmds.count, panel_cmds.state);
@@ -1532,14 +1532,14 @@ int iris_read_status(struct dsi_display_ctrl *ctrl, struct dsi_panel *panel)
 	pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 
 	if (pcfg->abypss_ctrl.abypass_mode == ANALOG_BYPASS_MODE) {
-		IRIS_LOGI("%s(), in bypass mode", __func__);
+		IRIS_LOGD("%s(), in bypass mode", __func__);
 		return 2;
 	}
 
 	if (1) {
 		int rc = 0;
 
-		IRIS_LOGI("%s(%d)", __func__, __LINE__);
+		IRIS_LOGD("%s(%d)", __func__, __LINE__);
 		rc = _iris_panel_ctrl_read_status(ctrl, panel);
 		if (rc <= 0)
 			return -EINVAL;

@@ -69,11 +69,11 @@ int32_t iris_parse_timing_switch_info(
 
 	rc = iris_parse_dtsi_cmd(np, IRIS_DTSI1_PIP_IDX);
 	if (rc)
-		IRIS_LOGI("%s, [optional] have not cmds list 1", __func__);
+		IRIS_LOGD("%s, [optional] have not cmds list 1", __func__);
 
 	rc = _iris_parse_timing_switch_seq(np, pcfg);
 	if (rc)
-		IRIS_LOGI("%s, [optional] have not timing switch sequence", __func__);
+		IRIS_LOGD("%s, [optional] have not timing switch sequence", __func__);
 
 	return 0;
 }
@@ -89,7 +89,7 @@ void iris_send_timing_switch_pkt(void)
 	if ((refresh_rate == HIGH_FREQ) && (v_active == FHD_H))
 		pseq = &pcfg->timing_switch_seq_1;
 
-	IRIS_LOGI("%s, cmd list index: %d, v res: %d, fps: %d",
+	IRIS_LOGD("%s, cmd list index: %d, v res: %d, fps: %d",
 			__func__, pcfg->cmd_list_index, v_active, refresh_rate);
 
 	if (pseq == NULL) {
@@ -184,7 +184,7 @@ int iris_post_switch(struct dsi_panel *panel,
 	u32 frame_height = mode_info->v_active;
 	u32 switch_case = _iris_switch_case(refresh_rate, frame_height);
 
-	IRIS_LOGI("%s(), post switch to %ux%u@%uHz, cmd list %u, switch case %s",
+	IRIS_LOGD("%s(), post switch to %ux%u@%uHz, cmd list %u, switch case %s",
 			__func__, frame_width, frame_height, refresh_rate,
 			pcfg->cmd_list_index, switch_case_name[switch_case]);
 
@@ -195,7 +195,7 @@ int iris_post_switch(struct dsi_panel *panel,
 
 	if (lightup_opt & 0x8) {
 		rc = iris_dsi_send_cmds(panel, switch_cmds->cmds, switch_cmds->count, switch_cmds->state);
-		IRIS_LOGI("%s(), post switch Force ABYP", __func__);
+		IRIS_LOGD("%s(), post switch Force ABYP", __func__);
 		return 0;
 	}
 
@@ -230,7 +230,7 @@ int iris_switch(struct dsi_panel *panel,
 
 	if (lightup_opt & 0x8) {
 		rc = iris_dsi_send_cmds(panel, switch_cmds->cmds, switch_cmds->count, switch_cmds->state);
-		IRIS_LOGI("%s(), switch between ABYP and ABYP, total cost '%d us'",
+		IRIS_LOGD("%s(), switch between ABYP and ABYP, total cost '%d us'",
 				__func__,
 				(u32)(ktime_to_us(ktime_get()) - ktime_to_us(ktime)));
 		IRIS_LOGW("%s(), force ABYP switch.", __func__);
@@ -253,7 +253,7 @@ int iris_switch(struct dsi_panel *panel,
 	// Update panel timing
 	iris_is_resolution_switched(mode_info);
 
-	IRIS_LOGI("%s(), return %d, total cost '%d us'",
+	IRIS_LOGD("%s(), return %d, total cost '%d us'",
 			__func__,
 			rc, (u32)(ktime_to_us(ktime_get()) - ktime_to_us(ktime)));
 
@@ -271,7 +271,7 @@ uint32_t iris_get_cont_type_with_timing_switch(struct dsi_panel *panel)
 				panel->cur_mode->timing.refresh_rate,
 				panel->cur_mode->timing.v_active);
 
-	IRIS_LOGI("%s(), switch case: %s, rate: %d, v: %d",
+	IRIS_LOGD("%s(), switch case: %s, rate: %d, v: %d",
 			__func__,
 			switch_case_name[switch_case],
 			panel->cur_mode->timing.refresh_rate,

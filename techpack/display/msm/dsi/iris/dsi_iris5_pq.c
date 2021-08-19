@@ -201,7 +201,7 @@ bool iris_dspp_dirty(void)
 	struct quality_setting *pqlt_cur_setting = &iris_setting.quality_cur;
 
 	if (pqlt_cur_setting->dspp_dirty > 0) {
-		IRIS_LOGI("DSPP is dirty");
+		IRIS_LOGD("DSPP is dirty");
 		pqlt_cur_setting->dspp_dirty--;
 		return true;
 	}
@@ -359,7 +359,7 @@ void iris_scaler_filter_ratio_get(void)
 	else
 		iris_scaler_filter_update(SCALER_PP, 1);
 
-	IRIS_LOGI("%s, scaler ratio=%d", __func__, dwScaleDownRatio);
+	IRIS_LOGD("%s, scaler ratio=%d", __func__, dwScaleDownRatio);
 	iris_scaler_filter_update(SCALER_INPUT, (u32)dwScaleDownRatio);
 }
 
@@ -396,7 +396,7 @@ void iris_pq_parameter_init(void)
 
 	pqlt_cur_setting->colortempvalue = 6500;
 
-	IRIS_LOGI("%s, iris_min_x_value=%d, iris_max_x_value = %d", __func__, iris_min_x_value, iris_max_x_value);
+	IRIS_LOGD("%s, iris_min_x_value=%d, iris_max_x_value = %d", __func__, iris_min_x_value, iris_max_x_value);
 }
 
 void iris_peaking_level_set(u32 level)
@@ -426,7 +426,7 @@ void iris_peaking_level_set(u32 level)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("peaking level=%d, len=%d", level, len);
+	IRIS_LOGD("peaking level=%d, len=%d", level, len);
 }
 
 static int iris_cm_csc_para_set(struct iris_update_ipopt *popt, uint8_t skip_last, uint32_t csc_ip, uint32_t *csc_value)
@@ -521,7 +521,7 @@ void iris_cm_6axis_level_set(u32 level)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("cm 6axis level=%d, len=%d", level, len);
+	IRIS_LOGD("cm 6axis level=%d, len=%d", level, len);
 }
 
 void iris_cm_ftc_enable_set(u32 level)
@@ -545,7 +545,7 @@ void iris_cm_ftc_enable_set(u32 level)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("cm ftc enable=%d, len=%d", level, len);
+	IRIS_LOGD("cm ftc enable=%d, len=%d", level, len);
 }
 
 
@@ -579,7 +579,7 @@ void iris_scurve_enable_set(u32 level)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("scurve level=%d, len=%d", level, len);
+	IRIS_LOGD("scurve level=%d, len=%d", level, len);
 }
 
 int iris_cm_ratio_set(struct iris_update_ipopt *popt, uint8_t skip_last)
@@ -630,7 +630,7 @@ int iris_cm_ratio_set(struct iris_update_ipopt *popt, uint8_t skip_last)
 	iris_update_bitmask_regval_nonread(&regval, false);
 	len = iris_init_update_ipopt_t(
 			popt, IP_OPT_MAX, IRIS_IP_DPP, 0xfd, 0xfd, skip_last);
-	IRIS_LOGI("cm color temperature value=%d", value);
+	IRIS_LOGD("cm color temperature value=%d", value);
 	return len;
 }
 
@@ -713,7 +713,7 @@ void iris_cm_colortemp_mode_set(u32 mode)
 		iris_update_pq_opt(popt, len, path);
 		iris_enable_ulps(path, is_ulps_enable);
 	}
-	IRIS_LOGI("cm color temperature mode=%d, len=%d", mode, len);
+	IRIS_LOGD("cm color temperature mode=%d, len=%d", mode, len);
 }
 
 void iris_cm_color_temp_set(void)
@@ -735,7 +735,7 @@ void iris_cm_color_temp_set(void)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 	/*}*/
-	IRIS_LOGI("%s, len = %d",  __func__, len);
+	IRIS_LOGD("%s, len = %d",  __func__, len);
 }
 
 void iris_cm_color_gamut_pre_set(u32 source_switch)
@@ -768,7 +768,7 @@ void iris_cm_color_gamut_pre_set(u32 source_switch)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("source switch = %d, len=%d", source_switch, len);
+	IRIS_LOGD("source switch = %d, len=%d", source_switch, len);
 }
 
 void iris_cm_color_gamut_set(u32 level)
@@ -815,7 +815,7 @@ void iris_cm_color_gamut_set(u32 level)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("cm color gamut=%d, len=%d", level, len);
+	IRIS_LOGD("cm color gamut=%d, len=%d", level, len);
 }
 
 void iris_cm_color_gamut_pre_clear(void)
@@ -919,7 +919,7 @@ static int iris_lce_gamm1k_set(
 				popt, IP_OPT_MAX, IRIS_IP_LCE,
 				0xfd, 0xfd, skip_last);
 	}
-	IRIS_LOGI("lux value=%d", pqlt_cur_setting->luxvalue);
+	IRIS_LOGD("lux value=%d", pqlt_cur_setting->luxvalue);
 	return len;
 }
 
@@ -946,7 +946,7 @@ static int iris_lce_gamm1k_restore(
 			popt, IP_OPT_MAX, IRIS_IP_LCE,
 			0xfd, 0xfd, skip_last);
 
-	IRIS_LOGI("%s, len = %d", __func__, len);
+	IRIS_LOGD("%s, len = %d", __func__, len);
 	return len;
 }
 
@@ -982,7 +982,7 @@ void iris_lce_mode_set(u32 mode)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("lce mode=%d, len=%d", mode, len);
+	IRIS_LOGD("lce mode=%d, len=%d", mode, len);
 }
 
 void iris_lce_level_set(u32 level)
@@ -1020,7 +1020,7 @@ void iris_lce_level_set(u32 level)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("lce level=%d, len=%d", level, len);
+	IRIS_LOGD("lce level=%d, len=%d", level, len);
 }
 
 void iris_lce_graphic_det_set(bool enable)
@@ -1045,7 +1045,7 @@ void iris_lce_graphic_det_set(bool enable)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("lce graphic det=%d, len=%d", enable, len);
+	IRIS_LOGD("lce graphic det=%d, len=%d", enable, len);
 }
 
 void iris_lce_al_set(bool enable)
@@ -1068,9 +1068,9 @@ void iris_lce_al_set(bool enable)
 		is_ulps_enable = iris_disable_ulps(path);
 		iris_update_pq_opt(popt, len, path);
 		iris_enable_ulps(path, is_ulps_enable);
-		IRIS_LOGI("%s, len = %d", __func__, len);
+		IRIS_LOGD("%s, len = %d", __func__, len);
 	}
-	IRIS_LOGI("lce al enable=%d", enable);
+	IRIS_LOGD("lce al enable=%d", enable);
 }
 
 void iris_lce_demo_window_set(u32 vsize, u32 hsize, u8 inwnd)
@@ -1085,7 +1085,7 @@ void iris_lce_demo_window_set(u32 vsize, u32 hsize, u8 inwnd)
 	int data;
 	uint8_t path = iris_pq_update_path;
 
-	IRIS_LOGI("%s E %d %d %d", __func__, vsize, hsize, inwnd);
+	IRIS_LOGD("%s E %d %d %d", __func__, vsize, hsize, inwnd);
 
 	iris_init_ipopt_ip(popt,  IP_OPT_MAX);
 	len = iris_capture_disable_lce(popt, &skiplast);
@@ -1120,7 +1120,7 @@ void iris_lce_demo_window_set(u32 vsize, u32 hsize, u8 inwnd)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("%s X %d %d %d, len=%d", __func__, vsize, hsize, inwnd, len);
+	IRIS_LOGD("%s X %d %d %d, len=%d", __func__, vsize, hsize, inwnd, len);
 }
 
 
@@ -1143,7 +1143,7 @@ void iris_dbc_level_set(u32 level)
 
 	iris_dbc_lut_index ^= 1;
 
-	IRIS_LOGI("send A/B  %d", iris_dbc_lut_index);
+	IRIS_LOGD("send A/B  %d", iris_dbc_lut_index);
 
 	localindex = 0x20 | iris_dbc_lut_index;
 	iris_update_ip_opt(popt, IP_OPT_MAX, DBC_LUT,
@@ -1162,7 +1162,7 @@ void iris_dbc_level_set(u32 level)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("dbc level=%d, len=%d", level, len);
+	IRIS_LOGD("dbc level=%d, len=%d", level, len);
 }
 
 void iris_reading_mode_set(u32 level)
@@ -1203,7 +1203,7 @@ void iris_reading_mode_set(u32 level)
 		iris_update_pq_opt(popt, len, path);
 		iris_enable_ulps(path, is_ulps_enable);
 	}
-	IRIS_LOGI("reading mode=%d", level);
+	IRIS_LOGD("reading mode=%d", level);
 }
 
 void iris_lce_lux_set(void)
@@ -1402,7 +1402,7 @@ void iris_dbclce_datapath_set(bool bEn)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("dbclce_en=%d, len=%d", bEn, len);
+	IRIS_LOGD("dbclce_en=%d, len=%d", bEn, len);
 }
 
 
@@ -1546,7 +1546,7 @@ void iris_sdr2hdr_level_set(u32 level)
 			pwil_csc, 0x01);
 
 	payload = iris_get_ipopt_payload_data(IRIS_IP_PWIL, 0xF1, 2);
-	IRIS_LOGI("pwil ctrl1 %x", payload[0]);
+	IRIS_LOGD("pwil ctrl1 %x", payload[0]);
 	pwil_datapath = (payload[2] & (~0x4018000)) | pwil_datapath;  //CSC_MODE 18000  POST_PQ_PROCESS_EN 4000000
 	pwil_datapath1 = (payload[3] & (~0x8020)) | pwil_datapath1;   //UNPACK_BYPASS_EN
 	pwil_ctrl1 = (payload[1] & (~0x40)) | (iris_yuv_datapath ? 0x40 : 0x00);
@@ -1638,7 +1638,7 @@ void iris_sdr2hdr_level_set(u32 level)
 	}
 
 	pqlt_cur_setting->source_switch = 0;
-	IRIS_LOGI("sdr2hdr level =%d, len = %d", level, len);
+	IRIS_LOGD("sdr2hdr level =%d, len = %d", level, len);
 }
 
 u32 iris_sdr2hdr_lut2ctl_get(void)
@@ -1653,7 +1653,7 @@ u32 iris_sdr2hdr_lut2ctl_get(void)
 
 void iris_sdr2hdr_lut2ctl_set(u32 value)
 {
-	IRIS_LOGI("Iris LUT2 Pos %d", value);
+	IRIS_LOGD("Iris LUT2 Pos %d", value);
 
 	if (value == 0xFFE00000) {
 		iris_sdr2hdr_lut2ctl = 0xFFE00000;
@@ -1682,7 +1682,7 @@ void iris_sdr2hdr_lutyctl_set(u32 value)
 		value = 1;
 
 	iris_sdr2hdr_lutyctl = ((value << 6) | (0xFF3F & iris_sdr2hdr_lutyctl));
-	IRIS_LOGI("iris_sdr2hdr_lutyctl %x", iris_sdr2hdr_lutyctl);
+	IRIS_LOGD("iris_sdr2hdr_lutyctl %x", iris_sdr2hdr_lutyctl);
 }
 
 void iris_peaking_idle_clk_enable(bool enable)
@@ -1738,7 +1738,7 @@ void iris_cm_6axis_seperate_gain(u8 gain_type, u32 value)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("cm gain type = %d, value = %d, len = %d",
+	IRIS_LOGD("cm gain type = %d, value = %d, len = %d",
 			gain_type, value, len);
 }
 
@@ -1769,7 +1769,7 @@ void iris_pwm_freq_set(u32 value)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("%s, blc_pwm freq=%d", __func__, regvalue);
+	IRIS_LOGD("%s, blc_pwm freq=%d", __func__, regvalue);
 }
 
 void iris_pwm_enable_set(bool enable)
@@ -1786,7 +1786,7 @@ void iris_pwm_enable_set(bool enable)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("%s, blc_pwm enable=%d", __func__, enable);
+	IRIS_LOGD("%s, blc_pwm enable=%d", __func__, enable);
 }
 
 void iris_dbc_bl_user_set(u32 value)
@@ -1824,7 +1824,7 @@ void iris_dbc_bl_user_set(u32 value)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("%s,bl_user value=%d", __func__, regvalue);
+	IRIS_LOGD("%s,bl_user value=%d", __func__, regvalue);
 }
 
 void iris_dbc_led0d_gain_set(u32 value)
@@ -1854,7 +1854,7 @@ void iris_dbc_led0d_gain_set(u32 value)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("%s,dbc_led0d value=%d", __func__, value);
+	IRIS_LOGD("%s,dbc_led0d value=%d", __func__, value);
 }
 
 void iris_panel_nits_set(u32 bl_ratio, bool bSystemRestore, int level)
@@ -1924,7 +1924,7 @@ void iris_scaler_filter_update(u8 scaler_type, u32 level)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("scaler filter level=%d", level);
+	IRIS_LOGD("scaler filter level=%d", level);
 }
 
 
@@ -1959,7 +1959,7 @@ void iris_scaler_gamma_enable(bool lightup_en, u32 level)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("gamma enable=%d", level);
+	IRIS_LOGD("gamma enable=%d", level);
 }
 
 
@@ -2115,7 +2115,7 @@ int32_t  iris_update_ip_opt(
 	struct iris_pq_ipopt_val *pq_ipopt_val = iris_get_cur_ipopt_val(ip);
 
 	if (pq_ipopt_val == NULL) {
-		IRIS_LOGI("can not get pq ipot val ip = %02x, opt_id = %02x",
+		IRIS_LOGD("can not get pq ipot val ip = %02x, opt_id = %02x",
 				ip, opt_id);
 		return 1;
 	}
@@ -2227,7 +2227,7 @@ uint32_t iris_frc_variable_set(int frc_var_disp)
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
 
-	IRIS_LOGI("%s, regval.value=%x", __func__, regval.value);
+	IRIS_LOGD("%s, regval.value=%x", __func__, regval.value);
 	return regval.value;
 }
 
@@ -2376,7 +2376,7 @@ void iris_psf_mif_efifo_set(u8 mode, bool osd_enable)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("mode = %d, regval.value = 0x%x, len = %d", mode, regval.value, len);
+	IRIS_LOGD("mode = %d, regval.value = 0x%x, len = %d", mode, regval.value, len);
 }
 
 void iris_psf_mif_dyn_addr_set(bool dyn_addr_enable)
@@ -2404,7 +2404,7 @@ void iris_psf_mif_dyn_addr_set(bool dyn_addr_enable)
 	is_ulps_enable = iris_disable_ulps(path);
 	iris_update_pq_opt(popt, len, path);
 	iris_enable_ulps(path, is_ulps_enable);
-	IRIS_LOGI("regval.value = 0x%x, len = %d", regval.value, len);
+	IRIS_LOGD("regval.value = 0x%x, len = %d", regval.value, len);
 }
 
 // -1: no update, 0: disable, 1: enable
@@ -2449,7 +2449,7 @@ void iris_ms_pwil_dma_update(struct iris_mspwil_parameter *par)
 		len  = iris_init_update_ipopt_t(popt, IP_OPT_MAX, regval.ip,
 				regval.opt_id, regval.opt_id, 1);
 		pwil_ad_frc_info = regval.value;
-		IRIS_LOGI("%s, pwil_ad_frc_info=%x", __func__, pwil_ad_frc_info);
+		IRIS_LOGD("%s, pwil_ad_frc_info=%x", __func__, pwil_ad_frc_info);
 	}
 
 	// type: 0x0001000C
@@ -2577,7 +2577,7 @@ static ssize_t iris_pq_config_write(struct file *file, const char __user *buff,
 
 	for (i = 0; i < len; i++) {
 		iris_configure_get(DSI_PRIMARY, arr[i].type, 1, &cfg_val);
-		IRIS_LOGI("%s: %d", arr[i].str, cfg_val);
+		IRIS_LOGD("%s: %d", arr[i].str, cfg_val);
 	}
 
 	return count;
@@ -2713,7 +2713,7 @@ void iris_dom_set(int mode)
 	// IRIS_LOGD("%s, mode: %d, DOM cnt: %d-%d", __func__, mode, pcfg->dom_cnt_in_ioctl, pcfg->dom_cnt_in_frc);
 	// if (mode != 0) {
 	// 	if (atomic_read(&pcfg->dom_cnt_in_ioctl) && atomic_read(&pcfg->dom_cnt_in_frc)) {
-	// 		IRIS_LOGI("%s, both set dom in ioctl and frc", __func__);
+	// 		IRIS_LOGD("%s, both set dom in ioctl and frc", __func__);
 	// 		atomic_set(&pcfg->dom_cnt_in_frc, 0);
 	// 		return;
 	// 	}
@@ -2824,14 +2824,14 @@ int32_t iris_parse_color_temp_range(struct device_node *np, struct iris_cfg *pcf
 		IRIS_LOGE("can not get property: pxlw,min-color-temp");
 		return rc;
 	}
-	IRIS_LOGI("pxlw,min-color-temp: %d", pcfg->min_color_temp);
+	IRIS_LOGD("pxlw,min-color-temp: %d", pcfg->min_color_temp);
 
 	rc = of_property_read_u32(np, "pxlw,max-color-temp", &(pcfg->max_color_temp));
 	if (rc) {
 		IRIS_LOGE("can not get property:pxlw,max-color-temp");
 		return rc;
 	}
-	IRIS_LOGI("pxlw,max-color-temp: %d", pcfg->max_color_temp);
+	IRIS_LOGD("pxlw,max-color-temp: %d", pcfg->max_color_temp);
 
 	return rc;
 }

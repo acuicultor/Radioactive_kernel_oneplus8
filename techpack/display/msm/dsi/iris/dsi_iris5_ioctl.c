@@ -164,7 +164,7 @@ int iris_operate_tool(struct msm_iris_operate_value *argp)
 	//		__func__, configure.type, configure.count);
 	//	return -EPERM;
 	// }
-	IRIS_LOGI("%s type = %d, value = %d", __func__, argp->type, argp->count);
+	IRIS_LOGD("%s type = %d, value = %d", __func__, argp->type, argp->count);
 
 	display_type = (argp->type >> 16) & 0xff;
 	pcfg = iris_get_cfg_by_index(display_type);
@@ -329,11 +329,11 @@ static int _iris_configure(u32 display, u32 type, u32 value)
 		break;
 	case IRIS_DYNAMIC_POWER_CTRL:
 		if (value & 0x01) {
-			IRIS_LOGI(" [%s, %d] open psr_mif osd first address eco.", __func__, __LINE__);
+			IRIS_LOGD(" [%s, %d] open psr_mif osd first address eco.", __func__, __LINE__);
 			iris_psf_mif_dyn_addr_set(true);
 			iris_dynamic_power_set(value & 0x01);
 		} else {
-			IRIS_LOGI(" [%s, %d] close psr_mif osd first address eco.", __func__, __LINE__);
+			IRIS_LOGD(" [%s, %d] close psr_mif osd first address eco.", __func__, __LINE__);
 			iris_dynamic_power_set(value & 0x01);
 			iris_psf_mif_dyn_addr_set(false);
 		}
@@ -402,7 +402,7 @@ static int _iris_configure(u32 display, u32 type, u32 value)
 			IRIS_LOGD("Same bypass mode");
 			break;
 		}
-		IRIS_LOGI("%s(), switch Iris mode to: %u", __func__, value);
+		IRIS_LOGD("%s(), switch Iris mode to: %u", __func__, value);
 		if (value == ANALOG_BYPASS_MODE) {
 			iris_panel_nits_set(0, true, value);
 			iris_quality_setting_off();
@@ -511,20 +511,20 @@ static int _iris_configure(u32 display, u32 type, u32 value)
 		break;
 	case IRIS_OSD_ENABLE:
 		if (pcfg1->iris_initialized == false) {
-			IRIS_LOGI("iris not initialized");
+			IRIS_LOGD("iris not initialized");
 			break;
 		}
 		if ((value == 1) || (value == 0)) {
-			IRIS_LOGI("call iris_switch_osd_blending(%d)", value);
+			IRIS_LOGD("call iris_switch_osd_blending(%d)", value);
 			iris_switch_osd_blending(value);
 		} else if (value == 0x10) {
-			IRIS_LOGI("power on iris mipi2 rx");
+			IRIS_LOGD("power on iris mipi2 rx");
 			iris_set_second_channel_power(true);
 		} else if (value == 0x20) {
-			IRIS_LOGI("reset pwil_v6, power off bulksram");
+			IRIS_LOGD("reset pwil_v6, power off bulksram");
 			iris_second_channel_post(value);
 		} else if (value == 0x21) {
-			IRIS_LOGI("power off iris mipi2 rx");
+			IRIS_LOGD("power off iris mipi2 rx");
 			iris_set_second_channel_power(false);
 		} else if (value == 0x40) {
 			iris_dom_set(0);
@@ -597,7 +597,7 @@ int iris_configure(u32 display, u32 type, u32 value)
 	struct iris_cfg *pcfg = iris_get_cfg_by_index(DSI_PRIMARY);
 	int rc = 0;
 
-	IRIS_LOGI("%s(), display: %u, type: 0x%04x(%u), value: %#x(%u), current Iris mode: %d",
+	IRIS_LOGD("%s(), display: %u, type: 0x%04x(%u), value: %#x(%u), current Iris mode: %d",
 			__func__,
 			display, type, type, value, value, pcfg->abypss_ctrl.abypass_mode);
 	if (!_iris_is_valid_type(display, type))
@@ -749,7 +749,7 @@ static int _iris_configure_ex(u32 display, u32 type, u32 count, u32 *values)
 		}
 		break;
 	case IRIS_CONTRAST_DIMMING:
-		IRIS_LOGI("dpp csc value: csc0 = 0x%x, csc1 = 0x%x, csc2 = 0x%x, csc3 = 0x%x, csc4 = 0x%x",
+		IRIS_LOGD("dpp csc value: csc0 = 0x%x, csc1 = 0x%x, csc2 = 0x%x, csc3 = 0x%x, csc4 = 0x%x",
 				values[0], values[1], values[2], values[3], values[4]);
 		iris_cm_csc_level_set(IRIS_IP_DPP, &values[0]);
 		break;
@@ -882,7 +882,7 @@ int iris_configure_ex(u32 display, u32 type, u32 count, u32 *values)
 	struct iris_cfg *pcfg1 = iris_get_cfg_by_index(DSI_PRIMARY);
 	int rc = 0;
 
-	IRIS_LOGI("%s(), type: 0x%04x(%d), value: %#x(%d), count: %d, abyp mode: %d",
+	IRIS_LOGD("%s(), type: 0x%04x(%d), value: %#x(%d), count: %d, abyp mode: %d",
 			__func__,
 			type, type, values[0], values[0], count, pcfg->abypss_ctrl.abypass_mode);
 	if (!_iris_is_valid_type(display, type))
@@ -1031,7 +1031,7 @@ int iris_configure_get(u32 display, u32 type, u32 count, u32 *values)
 		mutex_unlock(&pcfg1->panel->panel_lock);
 		break;
 	case IRIS_DBG_TARGET_REGADDR_VALUE_GET:
-		IRIS_LOGI("%s:%d, pcfg->abypss_ctrl.abypass_mode = %d",
+		IRIS_LOGD("%s:%d, pcfg->abypss_ctrl.abypass_mode = %d",
 				__func__, __LINE__,
 				pcfg->abypss_ctrl.abypass_mode);
 		if ((pcfg->abypss_ctrl.abypass_mode == ANALOG_BYPASS_MODE) && (adb_type == 0))
@@ -1087,7 +1087,7 @@ int iris_configure_get(u32 display, u32 type, u32 count, u32 *values)
 	case IRIS_DUAL2SINGLE_ST:
 		mutex_lock(&pcfg1->panel->panel_lock);
 		if (pcfg2->mipi_pwr_st == false) {
-			IRIS_LOGI("mipi2 rx has been power off");
+			IRIS_LOGD("mipi2 rx has been power off");
 			*values = 1;
 		} else
 			*values = iris_get_dual2single_status();
@@ -1101,7 +1101,7 @@ int iris_configure_get(u32 display, u32 type, u32 count, u32 *values)
 		break;
 	case IRIS_AP_TE:
 		*values = pcfg1->ap_te;
-		IRIS_LOGI("get IRIS_AP_TE: %d", pcfg1->ap_te);
+		IRIS_LOGD("get IRIS_AP_TE: %d", pcfg1->ap_te);
 		break;
 	case IRIS_MODE_SET:
 		mutex_lock(&pcfg1->panel->panel_lock);
@@ -1125,7 +1125,7 @@ int iris_configure_get(u32 display, u32 type, u32 count, u32 *values)
 		return -EFAULT;
 	}
 
-	IRIS_LOGI("%s(), type: 0x%04x(%d), value: %d",
+	IRIS_LOGD("%s(), type: 0x%04x(%d), value: %d",
 			__func__,
 			type, type, *values);
 	return 0;

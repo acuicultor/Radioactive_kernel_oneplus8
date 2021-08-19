@@ -29,7 +29,7 @@ void iris_query_capability(struct dsi_panel *panel)
 		return;
 
 	if (!strcmp(panel->type, "secondary")) {
-		IRIS_LOGI("%s(), sencondary panel: %s", __func__, panel->name);
+		IRIS_LOGD("%s(), sencondary panel: %s", __func__, panel->name);
 		iris_dual_enable = true;
 		return;
 	}
@@ -43,7 +43,7 @@ void iris_query_capability(struct dsi_panel *panel)
 	soft_enable = utils->read_bool(utils->data,
 			"pxlw,soft-iris-enable");
 
-	IRIS_LOGI("%s(), iris chip enable: %s, soft iris enable: %s",
+	IRIS_LOGD("%s(), iris chip enable: %s, soft iris enable: %s",
 			__func__,
 			chip_enable ? "true" : "false",
 			soft_enable ? "true" : "false");
@@ -77,7 +77,7 @@ void iris_dsi_display_res_init(struct dsi_display *display)
 	if (!iris_is_chip_supported() && !iris_is_softiris_supported())
 		return;
 
-	IRIS_LOGI("%s(), display type: %s", __func__, display->display_type);
+	IRIS_LOGD("%s(), display type: %s", __func__, display->display_type);
 
 	if (iris_is_chip_supported()) {
 		if (NULL != display->display_type && !strcmp(display->display_type, "secondary")) {
@@ -405,7 +405,7 @@ void iris_dsi_panel_dump_pps(struct dsi_panel_cmd_set *set)
 	if (!set)
 		return;
 
-	IRIS_LOGI("%s(), qcom pps table:", __func__);
+	IRIS_LOGD("%s(), qcom pps table:", __func__);
 	print_hex_dump(KERN_ERR, "", DUMP_PREFIX_NONE, 16, 4,
 			set->cmds->msg.tx_buf, set->cmds->msg.tx_len, false);
 	print_hex_dump(KERN_ERR, "", DUMP_PREFIX_NONE, 4, 10,
@@ -446,5 +446,5 @@ void iris_dsi_ctrl_dump_desc_cmd(struct dsi_ctrl *dsi_ctrl,
 			break;
 	}
 
-	IRIS_LOGI("%s(), %s", __func__, buf);
+	IRIS_LOGD("%s(), %s", __func__, buf);
 }
