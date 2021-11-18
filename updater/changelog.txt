@@ -1,52 +1,14 @@
-Project name: Radioactive_kernel_oneplus8Series-V2.3.0
-  * makefile: remove more clang noise (acuicultor) [06d426ca55a8]
-  * Revert "kernel: sched: walt: fix window ravg HZ dependency" (acuicultor) [d764a2f113e7]
-  * touchpanel_common_driver: Expose gaming status (LibXZR) [08dea10e232b]
-  * touchpanel_common_driver: Introduce force_game_switch_enable node for userspace (LibXZR) [e82cdafaad36]
-  * touchpanel_common_driver: Fix game mode not restoring on wakeup (LibXZR) [8457145b065e]
-  * touchpanel_common_driver: Restore game mode status after switching touchpanel sample rate (LibXZR) [b8eebb15112c]
-  * touchpanel_common_driver: Init game mode variable (LibXZR) [0089072abfa1]
-  * touchscreen: s6sy761: Only perform pm_qos on cpu where the interrupt is running (LibXZR) [089efee8be36]
-  * s6sy761: fix memory leak from sec_ts_run_rawdata_all() (Park Ju Hyung) [cf6010a9bfdf]
-  * s6sy761: use GFP_DMA memory for touch_i2c_read_block() (Park Ju Hyung) [1115a1866eba]
-  * touchscreen: use GFP_DMA memory for touch_i2c_read_block() (Park Ju Hyung) [7b5cb8b56fa6]
-  * touchscreen: add a few bp hints (Park Ju Hyung) [f2198ae1c1d9]
-  * touchscreen: avoid dynamic memory allocations (Park Ju Hyung) [f2361b5a0dd0]
-  * touchscreen: avoid unnecessary heap allocations (Park Ju Hyung) [e8e6f7948413]
-  * s6sy761: avoid unnecessary heap allocations (Park Ju Hyung) [26b893dc43a4]
-  * mbcache: Speed up cache entry creation (Sultan Alsawaf) [a81647e79cac]
-  * proc: Don't let Google Camera run in the background (Sultan Alsawaf) [2d2f4246a11b]
-  * defconfig regenerate (acuicultor) [721ba9317b1a]
-  * block: Introduce Anxiety I/O Scheduler (tytydraco) [e465e32baccf]
-  * block: core: gotta go fast (Demon000) [03e013b86c74]
-  * block:fix for 4.9 (Dabug123) [b69eef314b7b]
-  * block: add tripndroid io scheduler (TripNRaVeR) [1f623e0ce375]
-  * block:keep default stock (Dabug123) [c2ea8c67ad3e]
-  * block: fix elevator ops (flar2) [3a367b797a29]
-  * maple-iosched: convert to use fb_notifier (flar2) [16fce00d4a58]
-  * maple-iosched: cast parameters to unsigned_long (flar2) [0d38df0ae669]
-  * block: add MAPLE I/O scheduler and set it as default (frap129) [f0afcca856e5]
-  * zen-iosched: cast parameters to unsigned long (flar2) [483d782742d7]
-  * block: add zen scheduler (andip71) [0f43e6424f53]
-  * sio-iosched: cast parameters to unsigned long (flar2) [28901e6a433c]
-  * SIO: update for linux 3.18 (flar2) [150a2bb64cee]
-  * fiops-iosched: update for linux 4.9 (flar2) [d1799bb3f727]
-  * FIOPS: update for linux 3.18 (flar2) [e0d74201dcaa]
-  * Add SIO and FIOPS i/o schedulers (flar2) [84c04f994142]
-  * ANDROID: increase limit on sched-tune boost groups (Todd Kjos) [cd5a881d0475]
-  * tcp: Agile-SD: make it work for 4.14 (freak07) [d054fe843ee2]
-  * Adding-Agile-SD-TCP-module-and-modifying-Kconfig-and-makefile (mohamedalrshah) [aac0d99e95e2]
-  * defconfig regenerate (acuicultor) [97d09659c3da]
-  * tcp: Fix sociopatch for 4.14 (HolyAngel) [854f154964ca]
-  * tcp:add sociopath (mlucy) [e46427885598]
-  * writeback: hardcode dirty_expire_centisecs=3000 (30s) (Park Ju Hyung) [ec10634be52c]
-  * fs: default to noatime (arter97) [a26b3b969efb]
-  * kbuild: use LLVM integrated assembler for C files (Stefan Agner) [5f6ec7caeb27]
-  * dts: kona-gpu: Remove qos active latency node (LibXZR) [dde460482b8c]
-  * cpufreq: Don't WARN_ON on non-existent cpu (LibXZR) [24bb9f178211]
-  * block: Do not collect I/O statistics (Tyler Nijmeh) [a69d36a48383]
-  * i2c: i2c-qcom-geni: Add a function to get the IRQ of a client's adapter (Sultan Alsawaf) [1ac2992a3eb9]
-  * irqchip: fix pcie device wakeup reason is unknown issue (luodw1) [8d07e1053448]
-  * oneplus: touchscreen: Adapt PM QoS usage to incoherent OnePlus code (Sultan Alsawaf) [d37e013b87a1]
-  * touchscreen: Optimize interrupt CPU usage (LibXZR) [28bae0514778]
-  * sock: inline SELinux's sk_security to struct sock (Park Ju Hyung) [dddc67aa05f1]
+Project name: Radioactive_kernel_oneplus8Series-V2.3.1
+  * update build version
+  * techpack: oneplus: Reorder gesture keys
+  * techpack: oneplus: Add more gestures
+  * dynamic stune boost to 4.19 patch squashed #1
+  * dts: kona-oem: touchscreen: Enable glove mode feature
+  * msm: kgsl: Relax CPU latency requirements to save power
+  * dts: qcom: Don't build kona & kona-v2 dtbs
+  * scripts: Makefile.lib: Don't disable dtc checks
+  * dtc-aosp: Makefile: Fix building on k4.19
+  * mkdtimg: Bundle upstream python rewrite as submodule
+  * dtbo.img: build device tree overlay partition image
+  * Revert "scripts: Makefile: add support to use external DTC"
+  * dtc: Bundle AOSP's fork of dtc
